@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { signIn } from 'next-auth/react';
 import styles from './sign-in.module.css';
 
 export default function SignInPage() {
@@ -11,9 +14,10 @@ export default function SignInPage() {
         </div>
 
         <div className="mt-8">
-          <a
-            href="/auth/login"
+          <button
+            onClick={() => signIn('google', { callbackUrl: '/' })}
             className={styles.signInButton}
+            style={{ width: '100%', border: 'none', cursor: 'pointer' }}
           >
             <svg className={styles.googleIcon} viewBox="0 0 24 24">
               <path
@@ -34,7 +38,7 @@ export default function SignInPage() {
               />
             </svg>
             התחברות עם Google
-          </a>
+          </button>
         </div>
 
         <div className={styles.footer}>

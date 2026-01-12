@@ -1,5 +1,7 @@
 import Layout from '@/app/components/Layout/Layout';
 import { TimelineProvider } from '@/context/TimelineContext';
+import { LayoutProvider } from '@/context/LayoutContext';
+import { SessionProvider } from 'next-auth/react';
 
 export default function DashboardLayout({
   children,
@@ -7,8 +9,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <TimelineProvider>
-      <Layout>{children}</Layout>
-    </TimelineProvider>
+    <SessionProvider>
+      <LayoutProvider>
+        <TimelineProvider>
+          <Layout>{children}</Layout>
+        </TimelineProvider>
+      </LayoutProvider>
+    </SessionProvider>
   );
 }

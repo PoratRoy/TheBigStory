@@ -1,0 +1,91 @@
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIconBtn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: opacity 0.2s;
+}
+
+.searchOverlay {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  left: -8px;
+  bottom: -8px;
+  background-color: #25252b;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scaleX(0.95);
+  transform-origin: right;
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+}
+
+.searchOverlayVisible {
+  opacity: 1;
+  visibility: visible;
+  transform: scaleX(1);
+}
+
+.searchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 0.5rem;
+  outline: none;
+  text-align: right;
+}
+
+.closeSearchBtn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+}
+
+.closeSearchBtn:hover {
+  color: white;
+}
+
+.searchIconInside {
+  color: #9ca3af;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+/* For full layout expansion if needed */
+@media (max-width: 640px) {
+  .searchOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    border-radius: 0;
+    margin: 0;
+  }
+}
