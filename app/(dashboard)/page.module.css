@@ -40,3 +40,17 @@
   color: #9ca3af;
   margin-top: 0.25rem;
 }
+
+.loading, .error, .empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  text-align: center;
+  color: #9ca3af;
+  width: 100%;
+}
+
+.error {
+  color: #ef4444;
+}
