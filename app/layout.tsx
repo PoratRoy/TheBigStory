@@ -4,6 +4,7 @@ import { Auth0Provider } from '@auth0/nextjs-auth0';
 import { auth0 } from '@/lib/auth0';
 import { syncUser } from './actions/auth';
 import './globals.css';
+import 'lineicons/dist/lineicons.css';
 import styles from './layout.module.css';
 
 const geistSans = Geist({
