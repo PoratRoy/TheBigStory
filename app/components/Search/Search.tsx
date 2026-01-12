@@ -42,7 +42,7 @@ export default function Search() {
 
       <div className={`${styles.searchOverlay} ${isOpen ? styles.searchOverlayVisible : ''}`}>
         <button className={styles.closeSearchBtn} onClick={toggleSearch} aria-label="סגור חיפוש">
-          <i className="lni lni-close"></i>
+          <Icons.Close />
         </button>
         <input 
           ref={inputRef}

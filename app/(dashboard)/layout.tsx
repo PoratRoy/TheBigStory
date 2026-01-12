@@ -1,6 +1,4 @@
-import Layout from '@/app/components/Layout/Layout';
 import { TimelineProvider } from '@/context/TimelineContext';
-import { LayoutProvider } from '@/context/LayoutContext';
 import { SessionProvider } from 'next-auth/react';
 
 export default function DashboardLayout({
@@ -10,11 +8,9 @@ export default function DashboardLayout({
 }) {
   return (
     <SessionProvider>
-      <LayoutProvider>
-        <TimelineProvider>
-          <Layout>{children}</Layout>
-        </TimelineProvider>
-      </LayoutProvider>
+      <TimelineProvider>
+        {children}
+      </TimelineProvider>
     </SessionProvider>
   );
 }

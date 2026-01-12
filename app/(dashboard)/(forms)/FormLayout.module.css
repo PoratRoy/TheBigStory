@@ -1,0 +1,60 @@
+.page {
+  min-height: 100vh;
+  height: 100dvh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  height: 64px;
+  background-color: var(--bar-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.formArea {
+  flex: 1;
+  background-color: var(--bg-color);
+  padding: 5vh 3vw 2rem 3vw;
+  overflow-y: auto;
+}
+
+.bottomArea {
+  padding: 1.5rem 3vw;
+  background-color: var(--bar-color);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}

@@ -1,0 +1,60 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.editorContainer {
+  min-height: 200px;
+}
+
+.categorySection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: right;
+}
+
+.categoryList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  direction: rtl;
+}
+
+.categoryTag {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.categoryTag:not(.selected) {
+  opacity: 0.7;
+}
+
+.categoryTag:hover {
+  opacity: 1;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: 0.875rem;
+  text-align: center;
+  margin: 0;
+}
+
+.emptyText {
+  opacity: 0.6;
+  font-size: 0.9rem;
+}

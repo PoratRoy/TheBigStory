@@ -1,0 +1,80 @@
+.timelineWrapper {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--bg-color);
+  direction: ltr;
+}
+
+.timelineContent {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.yearsScale {
+  display: flex;
+  padding-top: 40px;
+  padding-bottom: 10px;
+  position: relative;
+  background: linear-gradient(0deg, #6E6F7E 24%, #535461 100%);
+  z-index: 10;
+  flex-shrink: 0;
+  border-radius: var(--radius-big); /* 10px */
+}
+
+.yearMarker {
+  flex-shrink: 0;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.yearLine {
+  width: 2px;
+  height: 14px;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 6px;
+}
+
+.yearLabel {
+  font-size: 0.85rem;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.categoriesLayer {
+  position: relative;
+  padding-left: 80px;
+  margin-top: 20px;
+  flex: 1;
+}
+
+.timelineCategory {
+  height: 36px;
+  border-radius: var(--radius-small); /* 4px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  position: absolute;
+  white-space: nowrap;
+  padding: 0 20px;
+  box-shadow: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s, opacity 0.2s;
+  z-index: 5;
+}
+
+.timelineCategory:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}

@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background-color: #000;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .content {
@@ -19,10 +20,12 @@
   font-weight: 700;
   letter-spacing: -0.025em;
   margin-bottom: 0.5rem;
+  color: var(--text-color);
 }
 
 .subtitle {
-  color: #9ca3af;
+  color: var(--text-color);
+  opacity: 0.7;
   font-size: 1.125rem;
   margin-bottom: 2rem;
 }
@@ -35,18 +38,18 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color);
   font-size: 1.125rem;
   font-weight: 500;
-  border-radius: 0.75rem;
-  color: #000;
-  background-color: #fff;
-  transition: background-color 0.2s;
+  border-radius: var(--radius-small);
+  color: var(--text-color);
+  background-color: var(--bar-color);
+  transition: opacity 0.2s;
   cursor: pointer;
 }
 
 .signInButton:hover {
-  background-color: #e5e7eb;
+  opacity: 0.8;
 }
 
 .googleIcon {
@@ -57,5 +60,6 @@
 .footer {
   margin-top: 3rem;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-color);
+  opacity: 0.6;
 }

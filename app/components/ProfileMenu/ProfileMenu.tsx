@@ -31,29 +31,29 @@ export default function ProfileMenu() {
 
       {/* Side Panel */}
       <aside className={`${styles.sidePanel} ${isOpen ? styles.sidePanelOpen : ''}`}>
-        <div className={styles.panelHeader}>
-          <span className={styles.userName}>{user?.name || 'משתמש'}</span>
-          <button className={styles.closeButton} onClick={toggleMenu} aria-label="סגור">
-            <i className="lni lni-close"></i>
-          </button>
-        </div>
-
-        <nav>
-          <ul className={styles.menuList}>
-            <li className={styles.menuItem}>
-              <button 
-                onClick={() => signOut({ callbackUrl: '/sign-in' })} 
-                className={styles.menuLink}
-                style={{ width: '100%', border: 'none', cursor: 'pointer', textAlign: 'right' }}
-              >
-                <span className={styles.logoutIcon}>
-                  <i className="lni lni-exit"></i>
-                </span>
-                <span>יציאה</span>
+            <div className={styles.panelHeader}>
+              <span className={styles.userName}>{user?.name || 'משתמש'}</span>
+              <button className={styles.closeButton} onClick={toggleMenu} aria-label="סגור">
+                <Icons.Close />
               </button>
-            </li>
-          </ul>
-        </nav>
+            </div>
+
+            <nav>
+              <ul className={styles.menuList}>
+                <li className={styles.menuItem}>
+                  <button 
+                    onClick={() => signOut({ callbackUrl: '/sign-in' })} 
+                    className={styles.menuLink}
+                    style={{ width: '100%', border: 'none', cursor: 'pointer', textAlign: 'right' }}
+                  >
+                    <span className={styles.logoutIcon}>
+                      <Icons.Logout />
+                    </span>
+                    <span>יציאה</span>
+                  </button>
+                </li>
+              </ul>
+            </nav>
       </aside>
     </div>
   );

@@ -19,14 +19,14 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #3e3e4a;
+  background-color: var(--bar-color);
   object-fit: cover;
-  border: 2px solid transparent;
+  border: 1px solid var(--border-color);
   transition: border-color 0.2s;
 }
 
 .profileButton:hover .profileImage {
-  border-color: var(--primary-color);
+  border-color: var(--text-color);
 }
 
 /* Overlay / Blur Effect */
@@ -36,7 +36,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   z-index: 100;
   opacity: 0;
@@ -56,13 +56,14 @@
   right: -280px;
   width: 280px;
   height: 100vh;
-  background-color: #1e1e24;
+  background-color: var(--bg-color);
   z-index: 101;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.5);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   padding: 2rem 1.5rem;
+  border-left: 1px solid var(--border-color);
 }
 
 .sidePanelOpen {
@@ -79,7 +80,7 @@
 .closeButton {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-color);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0.5rem;
@@ -106,16 +107,17 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  color: white;
+  color: var(--text-color);
   text-decoration: none;
   font-size: 1.125rem;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.03);
-  transition: background-color 0.2s;
+  border-radius: var(--radius-small);
+  background-color: var(--bar-color);
+  border: 1px solid var(--border-color);
+  transition: opacity 0.2s;
 }
 
 .menuLink:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  opacity: 0.8;
 }
 
 .logoutIcon {
@@ -126,4 +128,5 @@
 .userName {
   font-weight: 600;
   font-size: 1.25rem;
+  color: var(--text-color);
 }

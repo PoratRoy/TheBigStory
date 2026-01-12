@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Icons } from '@/app/components/Icons';
 import { useLayout } from '@/context/LayoutContext';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
@@ -13,6 +15,14 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const { viewMode, toggleViewMode } = useLayout();
+  const pathname = usePathname();
+
+  // Define paths that should hide the global TopBar and BottomBar
+  const isFormPage = pathname === '/add-event' || pathname === '/add-category';
+
+  if (isFormPage) {
+    return <div className={styles.layout} dir="rtl">{children}</div>;
+  }
 
   return (
     <div className={styles.layout} dir="rtl">
@@ -37,18 +47,18 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Bottom Bar */}
       <nav className={styles.bottomBar}>
-        <button className={styles.bottomButton}>
+        <Link href="/add-category" className={styles.bottomButton}>
           <div className={styles.iconWrapper}>
             <Icons.AddCategory />
           </div>
           <span className={styles.btnText}>הוספת תקופה</span>
-        </button>
-        <button className={styles.bottomButton}>
+        </Link>
+        <Link href="/add-event" className={styles.bottomButton}>
           <div className={styles.iconWrapper}>
             <Icons.AddEvent />
           </div>
           <span className={styles.btnText}>הוספת אירוע</span>
-        </button>
+        </Link>
       </nav>
     </div>
   );

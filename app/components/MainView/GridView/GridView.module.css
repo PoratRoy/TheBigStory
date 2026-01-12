@@ -1,0 +1,78 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+}
+
+.gridCard {
+  background-color: var(--bar-color);
+  border-radius: var(--radius-small); /* 4px as requested */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 76px; /* Slightly shorter for mobile grid */
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.gridCard:hover {
+  opacity: 0.9;
+}
+
+.cardTop {
+  height: 6px;
+  width: 100%;
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.cardInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: ltr;
+}
+
+.cardTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px; /* Tighter for mobile grid */
+}
+
+.cardYears {
+  font-size: 0.65rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.separator {
+  width: 1.5px;
+  height: 18px;
+  background-color: var(--text-color);
+  opacity: 0.4;
+}
