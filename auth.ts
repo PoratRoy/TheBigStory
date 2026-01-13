@@ -4,15 +4,15 @@ import { db } from './db';
 import { users, timelines } from './db/schema';
 import { eq } from 'drizzle-orm';
 
-if (!process.env.AUTH_SECRET) {
-  throw new Error(
-    'Missing AUTH_SECRET environment variable. Please add it to your .env.local file.'
-  );
+const authSecret = process.env.AUTH_SECRET;
+
+if (!authSecret && process.env.NODE_ENV === 'production') {
+  console.warn('Missing AUTH_SECRET environment variable. Auth will not work correctly.');
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === 'development',
-  secret: process.env.AUTH_SECRET,
+  secret: authSecret,
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
