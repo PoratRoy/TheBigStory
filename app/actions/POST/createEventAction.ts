@@ -6,6 +6,7 @@ import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
+import sanitizeHtml from 'sanitize-html';
 
 export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'categories'>> & { categoryIds?: string[] }) {
   try {
@@ -13,16 +14,18 @@ export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'ca
 
     const user = await getAuthenticatedUser();
     
-    // Dynamically import DOMPurify only when needed on the server
-    const { default: DOMPurify } = await import('isomorphic-dompurify');
+    // Sanitize the HTML content before saving to the database
+    const sanitizedText = sanitizeHtml(formData.text, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['u']),
+      allowedAttributes: {
+        '*': ['style', 'class'],
+      }
+    });
 
     // Shift all existing events for this user to make room for the new one at position 0
     await db.update(events)
       .set({ position: sql`${events.position} + 1` })
       .where(eq(events.userId, user.id));
-
-    // Sanitize the HTML content before saving to the database
-    const sanitizedText = DOMPurify.sanitize(formData.text);
 
     const [newEvent] = await db.insert(events).values({
       userId: user.id,
