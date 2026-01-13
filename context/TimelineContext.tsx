@@ -42,8 +42,8 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const refreshData = useCallback(async () => {
-    setIsLoading(true);
+  const refreshData = useCallback(async (isInitial = false) => {
+    if (isInitial) setIsLoading(true);
     setError(null);
     try {
       const [timelineRes, catsRes, eventsRes] = await Promise.all([
@@ -78,42 +78,61 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refreshData();
+    refreshData(true);
   }, [refreshData]);
 
   const addNewCategory = async (data: any) => {
     const res = await createCategoryAction(data);
-    if (res.success) await refreshData();
+    if (res.success && res.data) {
+      setCategories(prev => [...prev, res.data as Category].sort((a, b) => (a.startYear || 0) - (b.startYear || 0)));
+      await refreshData(); // Background refresh to sync everything
+    }
     return res;
   };
 
   const editCategory = async (id: string, data: any) => {
     const res = await updateCategoryAction(id, data);
-    if (res.success) await refreshData();
+    if (res.success && res.data) {
+      setCategories(prev => prev.map(cat => cat.id === id ? res.data as Category : cat).sort((a, b) => (a.startYear || 0) - (b.startYear || 0)));
+      await refreshData();
+    }
     return res;
   };
 
   const removeCategory = async (id: string) => {
     const res = await deleteCategoryAction(id);
-    if (res.success) await refreshData();
+    if (res.success) {
+      setCategories(prev => prev.filter(cat => cat.id !== id));
+      await refreshData();
+    }
     return res;
   };
 
   const addNewEvent = async (data: any) => {
     const res = await createEventAction(data);
-    if (res.success) await refreshData();
+    if (res.success && res.data) {
+      // Background refresh is safer for events due to categories join
+      // but we can at least stop the loading state if it was somehow triggered
+      await refreshData();
+    }
     return res;
   };
 
   const editEvent = async (id: string, data: any) => {
     const res = await updateEventAction(id, data);
-    if (res.success) await refreshData();
+    if (res.success && res.data) {
+      // Background refresh is safer for events due to categories join
+      await refreshData();
+    }
     return res;
   };
 
   const removeEvent = async (id: string) => {
     const res = await deleteEventAction(id);
-    if (res.success) await refreshData();
+    if (res.success) {
+      setEvents(prev => prev.filter(e => e.id !== id));
+      await refreshData();
+    }
     return res;
   };
 

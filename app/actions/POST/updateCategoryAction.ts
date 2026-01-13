@@ -16,7 +16,7 @@ export async function updateCategoryAction(id: string, formData: Partial<Omit<Ca
 
     if (!timeline) throw new Error('לא מורשה');
 
-    await db.update(categories)
+    const [updatedCategory] = await db.update(categories)
       .set({
         name: formData.name,
         startYear: formData.startYear,
@@ -25,10 +25,11 @@ export async function updateCategoryAction(id: string, formData: Partial<Omit<Ca
         isUnique: formData.isUnique,
         updatedAt: new Date(),
       })
-      .where(and(eq(categories.id, id), eq(categories.timelineId, timeline.id)));
+      .where(and(eq(categories.id, id), eq(categories.timelineId, timeline.id)))
+      .returning();
 
     revalidatePath('/');
-    return { success: true };
+    return { success: true, data: updatedCategory };
   } catch (error: any) {
     return { error: error.message || 'שגיאה בעדכון קטגוריה' };
   }

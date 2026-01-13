@@ -1,0 +1,15 @@
+v - add event - all the form broke - need to bring back
+v - grid - fix 2 rows gap 
+v - category - move the add event item to the bottom as fixed
+v - category - handel reorder and poistion (newes is on top)
+v - grid + timeline - add the option to delete category
+- category - clear the input after submit
+- category - minimaze the add event section
+- category - top bar icon to show simple list of all the events as read only
+- category - implement move functionalty
+- settings page 
+- timeline - jump to the defualt snap year
+- improve colors
+- query params
+
+- add uniqe categories and show them on the hamburger

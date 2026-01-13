@@ -11,14 +11,15 @@ export async function updateEventAction(id: string, formData: Partial<Omit<Event
   try {
     const user = await getAuthenticatedUser();
 
-    await db.update(events)
+    const [updatedEvent] = await db.update(events)
       .set({
         text: formData.text,
         position: formData.position,
         isCollapse: formData.isCollapse,
         updatedAt: new Date(),
       })
-      .where(and(eq(events.id, id), eq(events.userId, user.id)));
+      .where(and(eq(events.id, id), eq(events.userId, user.id)))
+      .returning();
 
     if (formData.categoryIds) {
       // Refresh event categories
@@ -34,7 +35,7 @@ export async function updateEventAction(id: string, formData: Partial<Omit<Event
     }
 
     revalidatePath('/');
-    return { success: true };
+    return { success: true, data: updatedEvent };
   } catch (error: any) {
     return { error: error.message || 'שגיאה בעדכון אירוע' };
   }

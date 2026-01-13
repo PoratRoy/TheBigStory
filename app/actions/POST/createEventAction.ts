@@ -2,6 +2,7 @@
 
 import { db } from '@/db';
 import { events, eventCategories } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
@@ -13,13 +14,18 @@ export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'ca
 
     const user = await getAuthenticatedUser();
 
+    // Shift all existing events for this user to make room for the new one at position 0
+    await db.update(events)
+      .set({ position: sql`${events.position} + 1` })
+      .where(eq(events.userId, user.id));
+
     // Sanitize the HTML content before saving to the database
     const sanitizedText = DOMPurify.sanitize(formData.text);
 
     const [newEvent] = await db.insert(events).values({
       userId: user.id,
       text: sanitizedText,
-      position: formData.position ?? 0,
+      position: 0, // Always start at the top
     }).returning();
 
     if (formData.categoryIds && formData.categoryIds.length > 0) {
@@ -32,7 +38,7 @@ export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'ca
     }
 
     revalidatePath('/');
-    return { success: true };
+    return { success: true, data: newEvent };
   } catch (error: any) {
     return { error: error.message || 'שגיאה בהוספת אירוע' };
   }

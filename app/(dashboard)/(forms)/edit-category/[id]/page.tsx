@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Input } from '@/components/Form/Input';
 import { ColorPicker } from '@/components/Form/ColorPicker';
 import { Button } from '@/components/Form/Button';
@@ -9,42 +9,43 @@ import { Select } from '@/components/Form/Select';
 import { useFormLayout } from '@/context/FormLayoutContext';
 import { useTimeline } from '@/context/TimelineContext';
 import { getRandomColor } from '@/style/colors';
-import styles from './page.module.css';
+import styles from '../../add-category/page.module.css';
 import formStyles from '@/components/Form/Form.module.css';
 
-export default function AddCategoryPage() {
+export default function EditCategoryPage() {
   const router = useRouter();
+  const { id } = useParams();
   const { setTitle } = useFormLayout();
-  const { timeline, yearOptions, addNewCategory } = useTimeline();
-
-  const currentYear = new Date().getFullYear();
-  const timelineStartYear = timeline?.startYear || 1998;
+  const { categories, yearOptions, editCategory, isLoading } = useTimeline();
 
   const [name, setName] = useState('');
-  const [startYear, setStartYear] = useState(timelineStartYear);
-  const [endYear, setEndYear] = useState(currentYear);
-  const [color, setColor] = useState('#3b82f6'); // Temporary, will update in useEffect
+  const [startYear, setStartYear] = useState(1998);
+  const [endYear, setEndYear] = useState(new Date().getFullYear());
+  const [color, setColor] = useState('#3b82f6');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setColor(getRandomColor());
-  }, []);
-
-  useEffect(() => {
-    if (timeline?.startYear) {
-      setStartYear(timeline.startYear);
-    }
-  }, [timeline]);
-
-  useEffect(() => {
-    setTitle('תקופה חדשה');
+    setTitle('עריכת תקופה');
   }, [setTitle]);
+
+  useEffect(() => {
+    if (!isLoading && categories.length > 0 && id && !isLoaded) {
+      const category = categories.find(cat => cat.id === id);
+      if (category) {
+        setName(category.name);
+        setStartYear(category.startYear || 1998);
+        setEndYear(category.endYear || new Date().getFullYear());
+        setColor(category.color || '#3b82f6');
+        setIsLoaded(true);
+      }
+    }
+  }, [categories, id, isLoading, isLoaded]);
 
   const handleStartYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStart = parseInt(e.target.value);
     setStartYear(newStart);
-    // Sync end year if it becomes invalid
     if (endYear < newStart) {
       setEndYear(newStart);
     }
@@ -68,7 +69,7 @@ export default function AddCategoryPage() {
     setIsSubmitting(true);
     setError(null);
 
-    const result = await addNewCategory({
+    const result = await editCategory(id as string, {
       name,
       startYear,
       endYear,
@@ -76,12 +77,20 @@ export default function AddCategoryPage() {
     });
 
     if (result.success) {
-      router.push('/');
+      router.push(`/category/${id}`);
     } else {
-      setError(result.error || 'שגיאה בשמירת הקטגוריה');
+      setError(result.error || 'שגיאה בעדכון הקטגוריה');
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading && !isLoaded) {
+    return <div className={formStyles.formCard}>טוען...</div>;
+  }
+
+  if (!isLoaded && !isLoading) {
+    return <div className={formStyles.formCard}>תקופה לא נמצאה</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className={formStyles.formCard}>
@@ -125,7 +134,7 @@ export default function AddCategoryPage() {
           type="submit" 
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'שומר...' : 'שמור תקופה'}
+          {isSubmitting ? 'מעדכן...' : 'עדכן תקופה'}
         </Button>
       </div>
     </form>

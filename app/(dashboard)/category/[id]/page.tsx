@@ -9,14 +9,18 @@ import { Icons } from '@/style/icons';
 import ProfileMenu from '@/components/ProfileMenu/ProfileMenu';
 import { Button } from '@/components/Form/Button';
 import { Event } from '@/models/interface/event';
+import { EventItem } from './EventItem';
+import { AddEventCard } from './AddEventCard';
 import styles from './page.module.css';
 
 export default function CategoryDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { categories, events, isLoading, error, removeEvent, editEvent, reorderEvents } = useTimeline();
+  const { categories, events, isLoading, error, removeEvent, editEvent, reorderEvents, removeCategory } = useTimeline();
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   const [categoryEvents, setCategoryEvents] = useState<Event[]>([]);
+  const [prevEventsCount, setPrevEventsCount] = useState(0);
 
   const category = categories.find(c => c.id === id);
 
@@ -26,8 +30,19 @@ export default function CategoryDetailPage() {
         .filter(e => e.categories?.some(cat => cat.id === id))
         .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
       setCategoryEvents(filtered);
+      
+      // If new event added, scroll to top
+      if (filtered.length > prevEventsCount && prevEventsCount > 0) {
+        setTimeout(() => {
+          scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+      }
+      setPrevEventsCount(filtered.length);
+    } else if (events.length === 0) {
+      setCategoryEvents([]);
+      setPrevEventsCount(0);
     }
-  }, [events, id]);
+  }, [events, id, prevEventsCount]);
 
   const handleReorder = async (newOrder: Event[]) => {
     setCategoryEvents(newOrder);
@@ -47,8 +62,27 @@ export default function CategoryDetailPage() {
     }
   };
 
+  const handleDeleteCategory = async () => {
+    if (confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${category?.name}" ואת כל האירועים שלה? פעולה זו אינה ניתנת לביטול.`)) {
+      const result = await removeCategory(id as string);
+      if (result.success) {
+        router.push('/');
+      } else {
+        alert(result.error);
+      }
+    }
+  };
+
+  const handleEditCategory = () => {
+    router.push(`/edit-category/${id}`);
+  };
+
   const handleToggleCollapse = async (eventId: string, state: boolean) => {
     await editEvent(eventId, { isCollapse: state });
+  };
+
+  const handleEdit = async (eventId: string, text: string) => {
+    await editEvent(eventId, { text });
   };
 
   const handleMove = (eventId: string) => {
@@ -81,6 +115,22 @@ export default function CategoryDetailPage() {
           <h1 className={styles.title}>
             {category.name} | {category.startYear}-{category.endYear || 'היום'}
           </h1>
+          <div className={styles.headerActions}>
+            <button 
+              onClick={handleEditCategory} 
+              className={styles.iconButton} 
+              title="ערוך תקופה"
+            >
+              <Icons.Update />
+            </button>
+            <button 
+              onClick={handleDeleteCategory} 
+              className={styles.iconButton} 
+              title="מחק תקופה"
+            >
+              <Icons.Delete />
+            </button>
+          </div>
         </div>
         <button onClick={() => router.back()} className={styles.backButton} aria-label="חזור">
           <Icons.Back />
@@ -88,7 +138,7 @@ export default function CategoryDetailPage() {
       </header>
 
       {/* Events List */}
-      <main className={styles.mainContent}>
+      <main ref={scrollContainerRef} className={styles.mainContent}>
         {error ? (
           <div className={styles.error}>
             <p>{error}</p>
@@ -111,56 +161,17 @@ export default function CategoryDetailPage() {
                 onDelete={handleDelete}
                 onToggleCollapse={handleToggleCollapse}
                 onMove={handleMove}
+                onEdit={handleEdit}
               />
             ))}
           </Reorder.Group>
         )}
       </main>
 
-      {/* Bottom Bar / Add Event Button */}
-      <footer className={styles.bottomBar}>
-        <button 
-          className={styles.addEventBtn} 
-          onClick={() => router.push(`/add-event?categoryId=${id}`)}
-        >
-          <Icons.AddEvent />
-          <span>הוספת אירוע</span>
-        </button>
+      {/* Add Event Card - Fixed at bottom */}
+      <footer className={styles.footer}>
+        <AddEventCard currentCategoryId={id as string} />
       </footer>
     </div>
-  );
-}
-
-function EventItem({ 
-  event, 
-  onDelete, 
-  onToggleCollapse, 
-  onMove 
-}: { 
-  event: Event, 
-  onDelete: (id: string) => void,
-  onToggleCollapse: (id: string, state: boolean) => void,
-  onMove: (id: string) => void
-}) {
-  const dragControls = useDragControls();
-
-  return (
-    <Reorder.Item 
-      value={event}
-      dragListener={false}
-      dragControls={dragControls}
-      style={{ listStyle: 'none' }}
-    >
-      <EventBox
-        id={event.id}
-        text={event.text}
-        isCollapse={!!event.isCollapse}
-        categories={event.categories || []}
-        dragControls={dragControls}
-        onDelete={onDelete}
-        onToggleCollapse={onToggleCollapse}
-        onMove={onMove}
-      />
-    </Reorder.Item>
   );
 }

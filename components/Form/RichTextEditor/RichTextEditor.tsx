@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import React, { forwardRef, useImperativeHandle } from 'react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
@@ -12,10 +12,12 @@ import styles from './RichTextEditor.module.css';
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
+  onBlur?: (value: string) => void;
   placeholder?: string;
+  isSmall?: boolean;
 }
 
-const MenuBar = ({ editor }: { editor: any }) => {
+export const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
     return null;
   }
@@ -84,7 +86,13 @@ const MenuBar = ({ editor }: { editor: any }) => {
   );
 };
 
-export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+export interface RichTextEditorRef {
+  editor: Editor | null;
+}
+
+const RichTextEditor = forwardRef<RichTextEditorRef, RichTextEditorProps & { hideToolbar?: boolean }>((props, ref) => {
+  const { value, onChange, onBlur, placeholder, isSmall, hideToolbar } = props;
+  
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -102,6 +110,11 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
+    onBlur: ({ editor }) => {
+      if (onBlur) {
+        onBlur(editor.getHTML());
+      }
+    },
     editorProps: {
       attributes: {
         class: 'tiptap',
@@ -109,10 +122,18 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     },
   });
 
+  useImperativeHandle(ref, () => ({
+    editor
+  }));
+
   return (
-    <div className={styles.container}>
-      <MenuBar editor={editor} />
+    <div className={`${styles.container} ${isSmall ? styles.small : ''}`}>
+      {!hideToolbar && <MenuBar editor={editor} />}
       <EditorContent editor={editor} className={styles.editorContent} />
     </div>
   );
-}
+});
+
+RichTextEditor.displayName = 'RichTextEditor';
+
+export default RichTextEditor;

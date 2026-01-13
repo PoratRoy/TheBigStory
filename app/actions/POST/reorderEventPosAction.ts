@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { events } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 
@@ -10,17 +10,23 @@ export async function reorderEventPosAction(eventIds: string[]) {
   try {
     const user = await getAuthenticatedUser();
 
-    // Neon HTTP driver doesn't support transactions. 
-    // We update each event position sequentially or in parallel.
-    for (let i = 0; i < eventIds.length; i++) {
-      await db.update(events)
-        .set({ position: i })
-        .where(and(eq(events.id, eventIds[i]), eq(events.userId, user.id)));
-    }
+    if (eventIds.length === 0) return { success: true };
+
+    // Use a VALUES join for batch updating positions.
+    // This is more efficient and robust than a CASE statement for Postgres.
+    const valuesList = eventIds.map((id, index) => sql`(${id}::uuid, ${index}::integer)`);
+    
+    await db.execute(sql`
+      UPDATE events AS e
+      SET position = v.new_pos
+      FROM (VALUES ${sql.join(valuesList, sql`, `)}) AS v(id, new_pos)
+      WHERE e.id = v.id AND e.user_id = ${user.id}::uuid
+    `);
 
     revalidatePath('/');
     return { success: true };
   } catch (error: any) {
+    console.error('Reorder Error:', error);
     return { error: error.message || 'שגיאה בסידור מחדש של האירועים' };
   }
 }

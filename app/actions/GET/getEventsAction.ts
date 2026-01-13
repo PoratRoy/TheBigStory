@@ -5,9 +5,11 @@ import { events, eventCategories, categories } from '@/db/schema';
 import { eq, asc } from 'drizzle-orm';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getEventsAction(): Promise<{ data?: Event[]; error?: string }> {
   try {
+    noStore();
     const user = await getAuthenticatedUser();
     const data = await db.query.events.findMany({
       where: eq(events.userId, user.id),

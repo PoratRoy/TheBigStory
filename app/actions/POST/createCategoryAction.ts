@@ -18,17 +18,17 @@ export async function createCategoryAction(formData: Partial<Omit<Category, 'id'
 
     if (!timeline) throw new Error('ציר זמן לא נמצא');
 
-    await db.insert(categories).values({
+    const [newCategory] = await db.insert(categories).values({
       timelineId: timeline.id,
       name: formData.name,
       startYear: formData.startYear,
       endYear: formData.endYear,
       color: formData.color,
       isUnique: formData.isUnique ?? false,
-    });
+    }).returning();
 
     revalidatePath('/');
-    return { success: true };
+    return { success: true, data: newCategory };
   } catch (error: any) {
     return { error: error.message || 'שגיאה בהוספת קטגוריה' };
   }
