@@ -4,11 +4,34 @@ import * as schema from './schema';
 
 const databaseUrl = process.env.DATABASE_URL;
 
-if (!databaseUrl && process.env.NODE_ENV === 'production') {
-  // During build time on some platforms, DATABASE_URL might be missing.
-  // We only want to throw if we're actually trying to use the DB in production.
-  console.warn('DATABASE_URL is not set. Database operations will fail.');
-}
+const createDb = () => {
+  if (!databaseUrl) {
+    // During build time, DATABASE_URL might be missing.
+    // We return a proxy that only throws when someone actually tries to use the database.
+    return new Proxy({} as any, {
+      get(_, prop) {
+        if (prop === 'then') return undefined; // Handle potential promise-like behavior
+        return () => {
+          throw new Error(
+            'DATABASE_URL is not set. Database operations cannot be performed. ' +
+            'Ensure the environment variable is configured in your deployment settings.'
+          );
+        };
+      }
+    });
+  }
 
-const sql = neon(databaseUrl || '');
-export const db = drizzle(sql, { schema });
+  try {
+    const sql = neon(databaseUrl);
+    return drizzle(sql, { schema });
+  } catch (error) {
+    console.error('Failed to initialize database connection:', error);
+    return new Proxy({} as any, {
+      get() {
+        throw new Error('Database connection failed to initialize.');
+      }
+    });
+  }
+};
+
+export const db = createDb();

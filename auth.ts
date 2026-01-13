@@ -4,10 +4,10 @@ import { db } from './db';
 import { users, timelines } from './db/schema';
 import { eq } from 'drizzle-orm';
 
-const authSecret = process.env.AUTH_SECRET;
+const authSecret = process.env.AUTH_SECRET || (process.env.NODE_ENV === 'production' ? undefined : 'development_secret');
 
-if (!authSecret && process.env.NODE_ENV === 'production') {
-  console.warn('Missing AUTH_SECRET environment variable. Auth will not work correctly.');
+if (!process.env.AUTH_SECRET && process.env.NODE_ENV === 'production') {
+  console.warn('Missing AUTH_SECRET environment variable. Auth will not work correctly in production.');
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -20,8 +20,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID || 'dummy_id',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy_secret',
     }),
   ],
   callbacks: {
