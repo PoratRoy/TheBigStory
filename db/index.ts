@@ -6,20 +6,20 @@ const databaseUrl = process.env.DATABASE_URL;
 
 const createDb = () => {
   if (!databaseUrl) {
-    // During build time or if env var is missing, return a proxy that throws a clear error
-    const handler: ProxyHandler<any> = {
+    // During build time, DATABASE_URL might be missing.
+    // We return a proxy that only throws when someone actually tries to use the database.
+    return new Proxy({} as any, {
       get(_, prop) {
-        if (prop === 'then') return undefined;
-        return new Proxy(() => {}, handler);
-      },
-      apply() {
-        throw new Error(
-          'DATABASE_URL is not set. Database operations cannot be performed. ' +
-          'Ensure the environment variable is configured in your Vercel/deployment settings.'
-        );
+        if (prop === 'then') return undefined; // Handle potential promise-like behavior
+        return () => {
+          throw new Error(
+            'DATABASE_URL is not set. Database operations cannot be performed. ' +
+            'Ensure the environment variable is configured in your deployment settings.'
+          );
+        };
+
       }
-    };
-    return new Proxy({} as any, handler);
+    });
   }
 
   try {
