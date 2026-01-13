@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Category } from '@/models/interface/category';
 import styles from './GridView.module.css';
 
@@ -7,10 +10,16 @@ interface GridViewProps {
 }
 
 export const GridView = ({ categories }: GridViewProps) => {
+  const router = useRouter();
+
   return (
     <div className={styles.grid}>
       {categories.map((category) => (
-        <div key={category.id} className={styles.gridCard}>
+        <button 
+          key={category.id} 
+          className={styles.gridCard}
+          onClick={() => router.push(`/category/${category.id}`)}
+        >
           <div 
             className={styles.cardTop} 
             style={{ backgroundColor: category.color || '#3b82f6' }} 
@@ -24,7 +33,7 @@ export const GridView = ({ categories }: GridViewProps) => {
               <h2 className={styles.cardTitle}>{category.name}</h2>
             </div>
           </div>
-        </div>
+        </button>
       ))}
     </div>
   );

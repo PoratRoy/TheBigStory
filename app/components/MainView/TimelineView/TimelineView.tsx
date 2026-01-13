@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Category } from '@/models/interface/category';
 import styles from './TimelineView.module.css';
 
@@ -7,6 +8,7 @@ interface TimelineViewProps {
 }
 
 export const TimelineView = ({ categories }: TimelineViewProps) => {
+  const router = useRouter();
   const YEAR_WIDTH = 160;
 
   const timelineYears = useMemo(() => {
@@ -72,7 +74,7 @@ export const TimelineView = ({ categories }: TimelineViewProps) => {
                   <button 
                     key={category.id}
                     className={styles.timelineCategory}
-                    onClick={() => console.log('Category clicked:', category.name)}
+                    onClick={() => router.push(`/category/${category.id}`)}
                     style={{
                       backgroundColor: category.color || '#3b82f6',
                       left: left,

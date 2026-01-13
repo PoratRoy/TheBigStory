@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTimeline } from '@/context/TimelineContext';
 import { createEventAction } from '@/app/actions/POST/createEventAction';
 import RichTextEditor from '@/app/components/Form/RichTextEditor/RichTextEditor';
@@ -10,6 +10,7 @@ import styles from './page.module.css';
 
 export default function AddEventPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { categories } = useTimeline();
   const { setTitle, setOnSubmit, setIsSubmitting } = useFormLayout();
   
@@ -21,7 +22,13 @@ export default function AddEventPage() {
   useEffect(() => {
     setMounted(true);
     setTitle('אירוע חדש');
-  }, [setTitle]);
+    
+    // Pre-select category from search params if provided
+    const categoryId = searchParams.get('categoryId');
+    if (categoryId) {
+      setSelectedCategoryIds([categoryId]);
+    }
+  }, [setTitle, searchParams]);
 
   const toggleCategory = (id: string) => {
     setSelectedCategoryIds(prev => 

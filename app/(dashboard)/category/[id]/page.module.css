@@ -1,0 +1,107 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background-color: var(--bg-color);
+  overflow: hidden;
+}
+
+.header {
+  height: 64px;
+  background-color: var(--bar-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 5vh 3vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.loading, .error, .empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.bottomBar {
+  padding: 1.5rem 3vw;
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.addEventBtn {
+  width: 100%;
+  max-width: 320px;
+  height: 54px;
+  background-color: var(--bar-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-big);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.addEventBtn:hover {
+  opacity: 0.9;
+}
+
+.addEventBtn i {
+  font-size: 1.2rem;
+}

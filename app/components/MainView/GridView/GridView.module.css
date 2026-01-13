@@ -25,6 +25,9 @@
   border: 1px solid var(--border-color);
   cursor: pointer;
   transition: opacity 0.2s;
+  padding: 0; /* Reset button padding */
+  font: inherit; /* Reset button font */
+  width: 100%; /* Ensure button takes full grid space */
 }
 
 .gridCard:hover {
