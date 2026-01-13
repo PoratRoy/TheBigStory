@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTimeline } from '@/context/TimelineContext';
 import { useLayout } from '@/context/LayoutContext';
-import { Icons } from '@/app/components/Icons';
+import { Icons } from '@/components/Icons';
 import { TimelineView } from './TimelineView/TimelineView';
 import { GridView } from './GridView/GridView';
 import styles from './MainView.module.css';

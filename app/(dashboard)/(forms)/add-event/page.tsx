@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTimeline } from '@/context/TimelineContext';
 import { createEventAction } from '@/app/actions/POST/createEventAction';
-import RichTextEditor from '@/app/components/Form/RichTextEditor/RichTextEditor';
+import RichTextEditor from '@/components/Form/RichTextEditor/RichTextEditor';
 import { useFormLayout } from '@/context/FormLayoutContext';
 import styles from './page.module.css';
 

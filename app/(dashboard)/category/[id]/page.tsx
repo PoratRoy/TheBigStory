@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useTimeline } from '@/context/TimelineContext';
-import { EventBox } from '@/app/components/EventBox/EventBox';
-import { Icons } from '@/app/components/Icons';
-import ProfileMenu from '@/app/components/ProfileMenu/ProfileMenu';
-import { Button } from '@/app/components/Form/Button';
+import { EventBox } from '@/components/EventBox/EventBox';
+import { Icons } from '@/components/Icons';
+import ProfileMenu from '@/components/ProfileMenu/ProfileMenu';
+import { Button } from '@/components/Form/Button';
 import { Event } from '@/models/interface/event';
 import styles from './page.module.css';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Icons } from '@/app/components/Icons';
+import { Icons } from '@/components/Icons';
 import styles from './Search.module.css';
 
 export default function Search() {

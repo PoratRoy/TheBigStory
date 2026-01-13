@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Icons } from '@/app/components/Icons';
-import ProfileMenu from '@/app/components/ProfileMenu/ProfileMenu';
-import { Button } from '@/app/components/Form/Button';
+import { Icons } from '@/components/Icons';
+import ProfileMenu from '@/components/ProfileMenu/ProfileMenu';
+import { Button } from '@/components/Form/Button';
 import { FormLayoutProvider, useFormLayout } from '@/context/FormLayoutContext';
 import styles from './FormLayout.module.css';
 

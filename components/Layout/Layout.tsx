@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Icons } from '@/app/components/Icons';
+import { Icons } from '@/components/Icons';
 import { useLayout } from '@/context/LayoutContext';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
 import Search from '../Search/Search';

@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createCategoryAction } from '@/app/actions/POST/createCategoryAction';
-import { Input } from '@/app/components/Form/Input';
-import { ColorPicker } from '@/app/components/Form/ColorPicker';
+import { Input } from '@/components/Form/Input';
+import { ColorPicker } from '@/components/Form/ColorPicker';
 import { useFormLayout } from '@/context/FormLayoutContext';
 import styles from './page.module.css';
 

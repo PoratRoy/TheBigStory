@@ -1,6 +1,6 @@
 'use client';
 
-import Layout from '@/app/components/Layout/Layout';
+import Layout from '@/components/Layout/Layout';
 import { LayoutProvider } from '@/context/LayoutContext';
 
 export default function MainLayout({

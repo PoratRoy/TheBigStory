@@ -1,16 +1,23 @@
-import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
-import { db } from "./db";
-import { users, timelines } from "./db/schema";
-import { eq } from "drizzle-orm";
+import NextAuth from 'next-auth';
+import Google from 'next-auth/providers/google';
+import { db } from './db';
+import { users, timelines } from './db/schema';
+import { eq } from 'drizzle-orm';
 
 if (!process.env.AUTH_SECRET) {
-  throw new Error("Missing AUTH_SECRET environment variable. Please add it to your .env.local file.");
+  throw new Error(
+    'Missing AUTH_SECRET environment variable. Please add it to your .env.local file.'
+  );
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
   secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours (refresh session every day)
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -19,10 +26,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "google") {
+      if (account?.provider === 'google') {
         const { name, image, email } = user;
         const googleId = account.providerAccountId;
-        
+
         try {
           // Check if user exists
           const existingUser = await db.query.users.findFirst({
@@ -31,12 +38,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           if (!existingUser) {
             // Create new user
-            const [newUser] = await db.insert(users).values({
-              googleId: googleId,
-              name: name || "משתמש",
-              googleImage: image,
-              email: email,
-            }).returning();
+            const [newUser] = await db
+              .insert(users)
+              .values({
+                googleId: googleId,
+                name: name || 'משתמש',
+                googleImage: image,
+                email: email,
+              })
+              .returning();
 
             // Create default timeline
             await db.insert(timelines).values({
@@ -48,7 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
           return true;
         } catch (error) {
-          console.error("Error syncing user during sign in:", error);
+          console.error('Error syncing user during sign in:', error);
           return false;
         }
       }
@@ -68,6 +78,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   pages: {
-    signIn: "/sign-in",
+    signIn: '/sign-in',
   },
 });

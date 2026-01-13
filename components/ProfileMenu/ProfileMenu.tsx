@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { Icons } from '@/app/components/Icons';
+import { Icons } from '@/components/Icons';
 import styles from './ProfileMenu.module.css';
 
 export default function ProfileMenu() {
