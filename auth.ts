@@ -4,15 +4,19 @@ import { db } from './db';
 import { users, timelines } from './db/schema';
 import { eq } from 'drizzle-orm';
 
-const authSecret = process.env.AUTH_SECRET || (process.env.NODE_ENV === 'production' ? undefined : 'development_secret');
+const authSecret = process.env.AUTH_SECRET;
 
-if (!process.env.AUTH_SECRET && process.env.NODE_ENV === 'production') {
-  console.warn('Missing AUTH_SECRET environment variable. Auth will not work correctly in production.');
+if (!authSecret) {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('CRITICAL: AUTH_SECRET is not set in production!');
+  } else {
+    console.warn('AUTH_SECRET is not set, using development fallback.');
+  }
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === 'development',
-  secret: authSecret,
+  secret: authSecret || 'development_secret_fallback_for_build',
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days

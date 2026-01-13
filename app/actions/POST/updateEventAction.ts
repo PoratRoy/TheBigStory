@@ -6,14 +6,18 @@ import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
+import DOMPurify from 'isomorphic-dompurify';
 
 export async function updateEventAction(id: string, formData: Partial<Omit<Event, 'id' | 'categories'>> & { categoryIds?: string[] }) {
   try {
     const user = await getAuthenticatedUser();
 
+    // Sanitize the HTML content before saving
+    const sanitizedText = formData.text ? DOMPurify.sanitize(formData.text) : undefined;
+
     const [updatedEvent] = await db.update(events)
       .set({
-        text: formData.text,
+        text: sanitizedText,
         position: formData.position,
         isCollapse: formData.isCollapse,
         updatedAt: new Date(),
