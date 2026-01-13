@@ -6,11 +6,13 @@ import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
-import DOMPurify from 'isomorphic-dompurify';
 
 export async function updateEventAction(id: string, formData: Partial<Omit<Event, 'id' | 'categories'>> & { categoryIds?: string[] }) {
   try {
     const user = await getAuthenticatedUser();
+
+    // Dynamically import DOMPurify only when needed on the server
+    const { default: DOMPurify } = await import('isomorphic-dompurify');
 
     // Sanitize the HTML content before saving
     const sanitizedText = formData.text ? DOMPurify.sanitize(formData.text) : undefined;

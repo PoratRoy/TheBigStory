@@ -6,13 +6,15 @@ import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
-import DOMPurify from 'isomorphic-dompurify';
 
 export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'categories'>> & { categoryIds?: string[] }) {
   try {
     if (!formData.text) throw new Error('תוכן האירוע הוא חובה');
 
     const user = await getAuthenticatedUser();
+    
+    // Dynamically import DOMPurify only when needed on the server
+    const { default: DOMPurify } = await import('isomorphic-dompurify');
 
     // Shift all existing events for this user to make room for the new one at position 0
     await db.update(events)
