@@ -24,7 +24,7 @@ export async function getEventsByCategoryAction(categoryId: string) {
 
     // Map to include categories for each event (to show pills)
     const eventsWithCategories = await Promise.all(
-      results.map(async (r) => {
+      results.map(async (r: any) => {
         const cats = await db.select({
           id: categories.id,
           name: categories.name,

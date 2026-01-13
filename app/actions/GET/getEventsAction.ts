@@ -16,7 +16,7 @@ export async function getEventsAction(): Promise<{ data?: Event[]; error?: strin
       orderBy: [asc(events.position)],
     });
     
-    const eventsWithCategories = await Promise.all(data.map(async (event) => {
+    const eventsWithCategories = await Promise.all(data.map(async (event: any) => {
       const cats = await db.select({
         id: categories.id,
         name: categories.name,

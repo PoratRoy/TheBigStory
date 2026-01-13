@@ -16,12 +16,11 @@ export async function deleteCategoryAction(id: string) {
     if (!timeline) throw new Error('לא מורשה');
 
     // 1. Find all events associated with this category before we delete it
-    const associatedEvents = await db.query.eventCategories.findMany({
-      where: eq(eventCategories.categoryId, id),
-      columns: { eventId: true }
-    });
+    const associatedEvents = await db.select({ eventId: eventCategories.eventId })
+      .from(eventCategories)
+      .where(eq(eventCategories.categoryId, id));
 
-    const eventIds = associatedEvents.map(ae => ae.eventId);
+    const eventIds = associatedEvents.map((ae: { eventId: string }) => ae.eventId);
 
     // 2. Delete the category
     // This will automatically delete entries in event_categories due to ON DELETE CASCADE

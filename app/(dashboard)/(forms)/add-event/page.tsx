@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTimeline } from '@/context/TimelineContext';
 import { useFormLayout } from '@/context/FormLayoutContext';
@@ -9,7 +9,7 @@ import { Button } from '@/components/Form/Button';
 import styles from './page.module.css';
 import formStyles from '@/components/Form/Form.module.css';
 
-export default function AddEventPage() {
+function AddEventForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { categories, addNewEvent } = useTimeline();
@@ -122,5 +122,13 @@ export default function AddEventPage() {
         </div>
       </div>
     </form>
+  );
+}
+
+export default function AddEventPage() {
+  return (
+    <Suspense fallback={<div className={formStyles.formCard}>טוען...</div>}>
+      <AddEventForm />
+    </Suspense>
   );
 }
