@@ -3,14 +3,18 @@
 import React from 'react';
 import { useTimeline } from '@/context/TimelineContext';
 import { useLayout } from '@/context/LayoutContext';
-import { Icons } from '@/components/Icons';
+import { Icons } from '@/style/icons';
 import { TimelineView } from './TimelineView/TimelineView';
 import { GridView } from './GridView/GridView';
 import styles from './MainView.module.css';
 
 export default function MainView() {
   const { categories, isLoading, error } = useTimeline();
-  const { viewMode } = useLayout();
+  const { viewMode, searchQuery } = useLayout();
+
+  const filteredCategories = categories.filter(category => 
+    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (isLoading) {
     return (
@@ -41,12 +45,23 @@ export default function MainView() {
     );
   }
 
+  if (filteredCategories.length === 0 && searchQuery !== '') {
+    return (
+      <div className={styles.empty}>
+        <div className={styles.emptyIcon}>
+          <Icons.Search />
+        </div>
+        <p>לא נמצאו תוצאות עבור "{searchQuery}"</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       {viewMode === 'grid' ? (
-        <GridView categories={categories} />
+        <GridView categories={filteredCategories} />
       ) : (
-        <TimelineView categories={categories} />
+        <TimelineView categories={filteredCategories} />
       )}
     </div>
   );

@@ -1,80 +1,118 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { EditorState, convertToRaw } from 'draft-js';
-import dynamic from 'next/dynamic';
-import draftToHtml from 'draftjs-to-html';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import React from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Placeholder from '@tiptap/extension-placeholder';
+import { Icons } from '@/style/icons';
 import styles from './RichTextEditor.module.css';
-
-// Dynamically import the Editor component
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
-  { ssr: false }
-);
 
 interface RichTextEditorProps {
   value: string;
-  onChange: (html: string) => void;
+  onChange: (value: string) => void;
   placeholder?: string;
 }
 
-export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-  const [isClient, setIsClient] = useState(false);
-  const isMounted = React.useRef(true);
-
-  useEffect(() => {
-    setIsClient(true);
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  const onEditorStateChange = (newEditorState: EditorState) => {
-    if (isMounted.current) {
-      setEditorState(newEditorState);
-      const content = newEditorState.getCurrentContent();
-      if (content) {
-        const html = draftToHtml(convertToRaw(content));
-        onChange(html);
-      }
-    }
-  };
-
-  if (!isClient) {
-    return <div className={styles.editorPlaceholder}>טוען עורך...</div>;
+const MenuBar = ({ editor }: { editor: any }) => {
+  if (!editor) {
+    return null;
   }
 
   return (
-    <div className={styles.editorWrapper} dir="rtl">
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={onEditorStateChange}
-        placeholder={placeholder}
-        toolbarClassName={styles.toolbar}
-        wrapperClassName={styles.wrapper}
-        editorClassName={styles.editor}
-        textAlignment="right"
-        toolbar={{
-          options: ['inline', 'list', 'textAlign', 'history'],
-          inline: {
-            options: ['bold', 'italic', 'underline', 'strikethrough'],
-          },
-          list: {
-            options: ['unordered', 'ordered'],
-          },
-          textAlign: {
-            inDropdown: false,
-            options: ['left', 'center', 'right', 'justify'],
-            default: 'right',
-          },
-        }}
-        localization={{
-          locale: 'he',
-        }}
-      />
+    <div className={styles.toolbar}>
+      <button
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run()}
+        className={`${styles.toolbarButton} ${editor.isActive('bold') ? styles.isActive : ''}`}
+        type="button"
+        title="Bold"
+      >
+        <Icons.Bold />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        className={`${styles.toolbarButton} ${editor.isActive('italic') ? styles.isActive : ''}`}
+        type="button"
+        title="Italic"
+      >
+        <Icons.Italic />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`${styles.toolbarButton} ${editor.isActive('underline') ? styles.isActive : ''}`}
+        type="button"
+        title="Underline"
+      >
+        <Icons.Underline />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`${styles.toolbarButton} ${editor.isActive('bulletList') ? styles.isActive : ''}`}
+        type="button"
+        title="Bullet List"
+      >
+        <Icons.List />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+        className={`${styles.toolbarButton} ${editor.isActive({ textAlign: 'right' }) ? styles.isActive : ''}`}
+        type="button"
+        title="Align Right"
+      >
+        <Icons.AlignRight />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+        className={`${styles.toolbarButton} ${editor.isActive({ textAlign: 'center' }) ? styles.isActive : ''}`}
+        type="button"
+        title="Align Center"
+      >
+        <Icons.AlignCenter />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+        className={`${styles.toolbarButton} ${editor.isActive({ textAlign: 'left' }) ? styles.isActive : ''}`}
+        type="button"
+        title="Align Left"
+      >
+        <Icons.AlignLeft />
+      </button>
+    </div>
+  );
+};
+
+export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        defaultAlignment: 'right',
+      }),
+      Placeholder.configure({
+        placeholder: placeholder || 'כתוב משהו...',
+      }),
+    ],
+    content: value,
+    immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'tiptap',
+      },
+    },
+  });
+
+  return (
+    <div className={styles.container}>
+      <MenuBar editor={editor} />
+      <EditorContent editor={editor} className={styles.editorContent} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useTimeline } from '@/context/TimelineContext';
 import { EventBox } from '@/components/EventBox/EventBox';
-import { Icons } from '@/components/Icons';
+import { Icons } from '@/style/icons';
 import ProfileMenu from '@/components/ProfileMenu/ProfileMenu';
 import { Button } from '@/components/Form/Button';
 import { Event } from '@/models/interface/event';

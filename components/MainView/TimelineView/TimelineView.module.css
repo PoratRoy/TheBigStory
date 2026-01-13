@@ -17,8 +17,10 @@
 
 .yearsScale {
   display: flex;
-  padding-top: 40px;
+  padding-top: 30px;
   padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   position: relative;
   background: linear-gradient(0deg, #6E6F7E 24%, #535461 100%);
   z-index: 10;
@@ -36,10 +38,11 @@
 }
 
 .yearLine {
-  width: 2px;
-  height: 14px;
-  background-color: rgba(255, 255, 255, 0.8);
+  width: 5px;
+  height: 25px;
+  background: linear-gradient(0deg, #8e8f9c 10%, #535461 100%);
   margin-bottom: 6px;
+  border-radius: 2px;
 }
 
 .yearLabel {
@@ -50,7 +53,8 @@
 
 .categoriesLayer {
   position: relative;
-  padding-left: 80px;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-top: 20px;
   flex: 1;
 }
@@ -75,6 +79,5 @@
 }
 
 .timelineCategory:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
+  opacity: 0.8;
 }

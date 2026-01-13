@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Category } from '@/models/interface/category';
+import { useLayout } from '@/context/LayoutContext';
 import styles from './TimelineView.module.css';
 
 interface TimelineViewProps {
@@ -9,6 +10,8 @@ interface TimelineViewProps {
 
 export const TimelineView = ({ categories }: TimelineViewProps) => {
   const router = useRouter();
+  const { searchQuery } = useLayout();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const YEAR_WIDTH = 160;
 
   const timelineYears = useMemo(() => {
@@ -22,6 +25,20 @@ export const TimelineView = ({ categories }: TimelineViewProps) => {
     }
     return { years, start: minYear };
   }, [categories]);
+
+  // Jump to first filtered category when searching
+  useEffect(() => {
+    if (searchQuery && categories.length > 0 && wrapperRef.current) {
+      const firstCat = categories[0];
+      const catStart = firstCat.startYear || timelineYears.start;
+      const scrollPosition = (catStart - timelineYears.start) * YEAR_WIDTH;
+      
+      wrapperRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+    }
+  }, [searchQuery, categories, timelineYears.start]);
 
   const rows: Category[][] = useMemo(() => {
     const sortedRows: Category[][] = [];
@@ -46,10 +63,10 @@ export const TimelineView = ({ categories }: TimelineViewProps) => {
   if (categories.length === 0) return null;
 
   return (
-    <div className={styles.timelineWrapper}>
+    <div className={styles.timelineWrapper} ref={wrapperRef}>
       <div 
         className={styles.timelineContent} 
-        style={{ width: (timelineYears.years.length - 1) * YEAR_WIDTH + 320 }}
+        style={{ width: (timelineYears.years.length * YEAR_WIDTH) + 20 }}
       >
         <div className={styles.yearsScale}>
           {timelineYears.years.map(year => (
@@ -67,8 +84,9 @@ export const TimelineView = ({ categories }: TimelineViewProps) => {
                 const catStart = category.startYear || timelineYears.start;
                 const catEnd = Math.max(category.endYear || catStart, catStart + 1);
                 
-                const left = (catStart - timelineYears.start) * YEAR_WIDTH + (YEAR_WIDTH / 2);
-                const width = (catEnd - catStart) * YEAR_WIDTH;
+                // 10 is the side padding from CSS. YEAR_WIDTH / 2 centers it on the line.
+                const left = (catStart - timelineYears.start) * YEAR_WIDTH + 10 + (YEAR_WIDTH / 2);
+                const width = Math.max(0, (catEnd - catStart) * YEAR_WIDTH - 4); // 4px gap
                 
                 return (
                   <button 

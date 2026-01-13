@@ -16,26 +16,27 @@
 
 .gridCard {
   background-color: var(--bar-color);
-  border-radius: var(--radius-small); /* 4px as requested */
+  border-radius: var(--radius-big);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 76px; /* Slightly shorter for mobile grid */
+  height: 74px;
   border: 1px solid var(--border-color);
   cursor: pointer;
   transition: opacity 0.2s;
-  padding: 0; /* Reset button padding */
-  font: inherit; /* Reset button font */
-  width: 100%; /* Ensure button takes full grid space */
+  padding: 0;
+  font: inherit;
+  width: 100%;
 }
 
 .gridCard:hover {
+  background-color: var(--border-color);
   opacity: 0.9;
 }
 
 .cardTop {
-  height: 6px;
+  height: 10px;
   width: 100%;
 }
 
@@ -44,38 +45,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 0 12px;
+  direction: rtl;
 }
 
 .cardInfo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  direction: ltr;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
 }
 
 .cardTitle {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 800;
   margin: 0;
   color: var(--text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 80px; /* Tighter for mobile grid */
+  width: 100%;
+  text-align: center;
 }
 
 .cardYears {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-color);
   opacity: 0.8;
   font-weight: 600;
   white-space: nowrap;
 }
 
-.separator {
-  width: 1.5px;
-  height: 18px;
-  background-color: var(--text-color);
-  opacity: 0.4;
-}

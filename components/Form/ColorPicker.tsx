@@ -18,7 +18,7 @@ export const ColorPicker = ({ label, value, onChange, onRandom }: ColorPickerPro
           onClick={onRandom}
           className={styles.randomColorBtn}
         >
-          צבע אחר
+          בחר צבע אחר
         </button>
       </div>
       <div 

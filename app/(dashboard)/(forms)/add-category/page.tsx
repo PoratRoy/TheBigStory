@@ -5,29 +5,62 @@ import { useRouter } from 'next/navigation';
 import { createCategoryAction } from '@/app/actions/POST/createCategoryAction';
 import { Input } from '@/components/Form/Input';
 import { ColorPicker } from '@/components/Form/ColorPicker';
+import { Button } from '@/components/Form/Button';
+import { Select } from '@/components/Form/Select';
 import { useFormLayout } from '@/context/FormLayoutContext';
+import { useTimeline } from '@/context/TimelineContext';
+import { getRandomColor } from '@/style/colors';
 import styles from './page.module.css';
+import formStyles from '@/components/Form/Form.module.css';
 
 export default function AddCategoryPage() {
   const router = useRouter();
-  const { setTitle, setOnSubmit, setIsSubmitting, isSubmitting } = useFormLayout();
+  const { setTitle } = useFormLayout();
+  const { timeline, yearOptions } = useTimeline();
+
+  const currentYear = new Date().getFullYear();
+  const timelineStartYear = timeline?.startYear || 1998;
 
   const [name, setName] = useState('');
-  const [startYear, setStartYear] = useState('1998');
-  const [endYear, setEndYear] = useState('2024');
-  const [color, setColor] = useState('#3b82f6');
+  const [startYear, setStartYear] = useState(timelineStartYear);
+  const [endYear, setEndYear] = useState(currentYear);
+  const [color, setColor] = useState('#3b82f6'); // Temporary, will update in useEffect
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setColor(getRandomColor());
+  }, []);
+
+  useEffect(() => {
+    if (timeline?.startYear) {
+      setStartYear(timeline.startYear);
+    }
+  }, [timeline]);
 
   useEffect(() => {
     setTitle('תקופה חדשה');
   }, [setTitle]);
 
-  const handleRandomColor = () => {
-    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
-    setColor(randomColor);
+  const handleStartYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStart = parseInt(e.target.value);
+    setStartYear(newStart);
+    // Sync end year if it becomes invalid
+    if (endYear < newStart) {
+      setEndYear(newStart);
+    }
   };
 
-  const handleSubmit = async () => {
+  const handleEndYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setEndYear(parseInt(e.target.value));
+  };
+
+  const handleRandomColor = () => {
+    setColor(getRandomColor());
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!name.trim()) {
       setError('אנא הכנס שם לתקופה');
       return;
@@ -38,8 +71,8 @@ export default function AddCategoryPage() {
 
     const result = await createCategoryAction({
       name,
-      startYear: parseInt(startYear),
-      endYear: parseInt(endYear),
+      startYear,
+      endYear,
       color,
     });
 
@@ -51,13 +84,8 @@ export default function AddCategoryPage() {
     }
   };
 
-  useEffect(() => {
-    setOnSubmit(() => handleSubmit);
-    return () => setOnSubmit(null);
-  }, [name, startYear, endYear, color]);
-
   return (
-    <div className={styles.form}>
+    <form onSubmit={handleSubmit} className={formStyles.formCard}>
       <Input 
         label="שם התקופה"
         type="text" 
@@ -68,18 +96,18 @@ export default function AddCategoryPage() {
       />
 
       <div className={styles.row}>
-        <Input 
+        <Select 
           label="שנת התחלה"
-          type="number" 
-          value={startYear} 
-          onChange={(e) => setStartYear(e.target.value)}
+          value={startYear}
+          onChange={handleStartYearChange}
+          options={yearOptions}
           required
         />
-        <Input 
+        <Select 
           label="שנת סיום"
-          type="number" 
-          value={endYear} 
-          onChange={(e) => setEndYear(e.target.value)}
+          value={endYear}
+          onChange={handleEndYearChange}
+          options={yearOptions.filter(opt => (opt.value as number) >= startYear)}
           required
         />
       </div>
@@ -92,6 +120,15 @@ export default function AddCategoryPage() {
       />
 
       {error && <p className={styles.errorText}>{error}</p>}
-    </div>
+
+      <div className={formStyles.formActions}>
+        <Button 
+          type="submit" 
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'שומר...' : 'שמור תקופה'}
+        </Button>
+      </div>
+    </form>
   );
 }

@@ -26,11 +26,10 @@ export const GridView = ({ categories }: GridViewProps) => {
           />
           <div className={styles.cardContent}>
             <div className={styles.cardInfo}>
+              <h2 className={styles.cardTitle}>{category.name}</h2>
               <span className={styles.cardYears}>
                 {category.startYear}-{category.endYear || 'היום'}
               </span>
-              <div className={styles.separator} />
-              <h2 className={styles.cardTitle}>{category.name}</h2>
             </div>
           </div>
         </button>

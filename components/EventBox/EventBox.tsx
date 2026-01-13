@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { DragControls } from 'framer-motion';
-import { Icons } from '@/components/Icons';
+import { Icons } from '@/style/icons';
 import styles from './EventBox.module.css';
 
 interface CategoryPill {

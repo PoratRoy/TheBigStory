@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Icons } from '@/components/Icons';
+import { Icons } from '@/style/icons';
 import ProfileMenu from '@/components/ProfileMenu/ProfileMenu';
 import { Button } from '@/components/Form/Button';
 import { FormLayoutProvider, useFormLayout } from '@/context/FormLayoutContext';
@@ -10,7 +10,7 @@ import styles from './FormLayout.module.css';
 
 function FormLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { title, isSubmitting, submitButtonText, onSubmit } = useFormLayout();
+  const { title } = useFormLayout();
 
   const handleBack = () => {
     router.back();
@@ -32,17 +32,6 @@ function FormLayoutInner({ children }: { children: React.ReactNode }) {
       {/* Form Area */}
       <div className={styles.formArea}>
         {children}
-      </div>
-
-      {/* Bottom Action Area */}
-      <div className={styles.bottomArea}>
-        <Button 
-          type="button" 
-          onClick={() => onSubmit?.()}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'שומר...' : submitButtonText}
-        </Button>
       </div>
     </div>
   );

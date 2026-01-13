@@ -17,7 +17,8 @@
   background-color: var(--bar-color);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-small);
-  padding: 0.75rem 1rem;
+  padding: 0 1rem;
+  height: var(--input-height);
   color: var(--text-color);
   font-size: 1rem;
   outline: none;
@@ -47,7 +48,8 @@
   background-color: var(--bar-color);
   border: 1px solid var(--border-color);
   color: var(--text-color);
-  padding: 0.25rem 0.75rem;
+  padding: 0 0.75rem;
+  height: calc(var(--input-height) * 0.8);
   border-radius: var(--radius-small);
   font-size: 0.875rem;
   cursor: pointer;
@@ -55,7 +57,7 @@
 
 .colorPreview {
   width: 100%;
-  height: 48px;
+  height: var(--input-height);
   border-radius: var(--radius-small);
   border: 1px solid var(--border-color);
   cursor: pointer;
@@ -63,7 +65,10 @@
 
 .button {
   width: 100%;
-  padding: 1rem;
+  height: var(--input-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-small);
   font-size: 1.125rem;
   font-weight: 600;
@@ -88,4 +93,23 @@
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.formCard {
+  background-color: var(--bar-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-big);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.formActions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
 }

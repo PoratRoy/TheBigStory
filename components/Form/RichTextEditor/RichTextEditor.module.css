@@ -1,96 +1,79 @@
-.editorWrapper {
-  background-color: var(--bar-color);
+.container {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-small);
+  background-color: var(--bar-color);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.editorPlaceholder {
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--bar-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-small);
-  color: var(--text-color);
-  opacity: 0.6;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 200px;
+  min-height: 300px;
 }
 
 .toolbar {
-  background-color: var(--bar-color) !important;
-  border: none !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  padding: 8px !important;
-  margin-bottom: 0 !important;
-  display: flex !important;
-  flex-direction: row-reverse !important; /* Reverse toolbar order for RTL */
-  justify-content: flex-end !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--border-color);
+  direction: rtl;
 }
 
-.toolbar :global(.rdw-option-wrapper) {
-  background-color: transparent !important;
-  border: 1px solid var(--border-color) !important;
-  color: var(--text-color) !important;
-  margin: 2px !important;
+.toolbarButton {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-color);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius-small);
+  font-size: 1rem;
+  transition: all 0.2s;
 }
 
-.toolbar :global(.rdw-dropdown-wrapper) {
-  background-color: transparent !important;
-  border: 1px solid var(--border-color) !important;
-  color: var(--text-color) !important;
-  margin: 2px !important;
+.toolbarButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.toolbar :global(.rdw-dropdown-optionwrapper) {
-  background-color: var(--bar-color) !important;
-  border-color: var(--border-color) !important;
-  color: var(--text-color) !important;
-  text-align: right !important;
+.isActive {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--border-color);
 }
 
-.toolbar :global(.rdw-dropdown-carettoopen) {
-  border-top-color: var(--text-color) !important;
+.editorContent {
+  flex: 1;
+  padding: 1rem;
+  direction: rtl;
+  text-align: right;
+  min-height: 250px;
 }
 
-.toolbar :global(.rdw-dropdown-carettoclose) {
-  border-bottom-color: var(--text-color) !important;
+/* Tiptap styles */
+.editorContent :global(.tiptap) {
+  outline: none;
+  min-height: 250px;
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
-.toolbar :global(.rdw-option-wrapper:hover) {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+.editorContent :global(.tiptap p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  float: right;
+  color: var(--text-color);
+  opacity: 0.4;
+  pointer-events: none;
+  height: 0;
 }
 
-.toolbar :global(.rdw-option-active) {
-  background-color: var(--bg-color) !important;
-  border-color: var(--text-color) !important;
+.editorContent :global(.tiptap ul), 
+.editorContent :global(.tiptap ol) {
+  padding-right: 1.5rem;
+  margin: 1rem 0;
 }
 
-.toolbar :global(.rdw-option-wrapper img) {
-  filter: invert(1);
-}
-
-.editor {
-  padding: 1rem !important;
-  color: var(--text-color) !important;
-  font-size: 1rem !important;
-  min-height: 150px !important;
-  text-align: right !important;
-}
-
-.editor :global(.public-DraftEditorPlaceholder-root) {
-  color: var(--text-color) !important;
-  opacity: 0.5 !important;
-  right: 1rem !important; /* Align placeholder to right */
-  left: auto !important;
-  width: calc(100% - 2rem) !important;
-  text-align: right !important;
+.editorContent :global(.tiptap li) {
+  margin-bottom: 0.5rem;
 }

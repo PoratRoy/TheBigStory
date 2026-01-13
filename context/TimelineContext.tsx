@@ -19,6 +19,7 @@ interface TimelineContextType {
   timeline: Timeline | null;
   categories: Category[];
   events: Event[];
+  yearOptions: { value: number; label: number }[];
   isLoading: boolean;
   error: string | null;
   refreshData: () => Promise<void>;
@@ -37,6 +38,7 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
   const [timeline, setTimeline] = useState<Timeline | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
+  const [yearOptions, setYearOptions] = useState<{ value: number; label: number }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,9 +56,20 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
       if (catsRes.error) throw new Error(catsRes.error);
       if (eventsRes.error) throw new Error(eventsRes.error);
 
-      setTimeline(timelineRes.data || null);
+      const timelineData = timelineRes.data || null;
+      setTimeline(timelineData);
       setCategories(catsRes.data || []);
       setEvents(eventsRes.data || []);
+
+      // Generate year options
+      const currentYear = new Date().getFullYear();
+      const startYear = timelineData?.startYear || 1998;
+      const years = Array.from(
+        { length: currentYear - startYear + 1 }, 
+        (_, i) => startYear + i
+      ).reverse();
+      setYearOptions(years.map(y => ({ value: y, label: y })));
+
     } catch (err: any) {
       setError(err.message || 'שגיאה בטעינת הנתונים');
     } finally {
@@ -115,6 +128,7 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
       timeline,
       categories,
       events,
+      yearOptions,
       isLoading,
       error,
       refreshData,

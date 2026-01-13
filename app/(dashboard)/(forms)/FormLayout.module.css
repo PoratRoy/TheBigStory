@@ -48,13 +48,9 @@
 .formArea {
   flex: 1;
   background-color: var(--bg-color);
-  padding: 5vh 3vw 2rem 3vw;
+  padding: 2rem 1rem;
   overflow-y: auto;
-}
-
-.bottomArea {
-  padding: 1.5rem 3vw;
-  background-color: var(--bar-color);
-  border-top: 1px solid var(--border-color);
-  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }

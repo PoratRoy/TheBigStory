@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Icons } from '@/components/Icons';
+import { Icons } from '@/style/icons';
 import { useLayout } from '@/context/LayoutContext';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
 import Search from '../Search/Search';
@@ -32,11 +32,33 @@ export default function Layout({ children }: LayoutProps) {
           <ProfileMenu />
           <h1 className={styles.appName}>הסיפור הגדול</h1>
         </div>
+
+        {/* Center: Desktop Search */}
+        <div className={styles.topBarCenter}>
+          <Search isAlwaysOpen />
+        </div>
+
         <div className={styles.topBarLeft}>
+          {/* Mobile Search */}
+          <div className={styles.mobileSearch}>
           <Search />
+          </div>
+          
           <button className={styles.iconButton} aria-label="החלף תצוגה" onClick={toggleViewMode}>
             {viewMode === 'grid' ? <Icons.ViewTimeline /> : <Icons.ViewGrid />}
           </button>
+
+          {/* Desktop Actions */}
+          <div className={styles.topBarActions}>
+            <Link href="/add-category" className={styles.topBarButton}>
+              <Icons.AddCategory />
+              <span>הוספת תקופה</span>
+            </Link>
+            <Link href="/add-event" className={styles.topBarButton}>
+              <Icons.AddEvent />
+              <span>הוספת אירוע</span>
+            </Link>
+          </div>
         </div>
       </header>
 
