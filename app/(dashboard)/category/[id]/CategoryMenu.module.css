@@ -4,7 +4,7 @@
   align-items: center;
 }
 
-.trigger {
+.menuButton {
   background: none;
   border: none;
   color: var(--text-color);
@@ -15,11 +15,11 @@
   align-items: center;
   justify-content: center;
   opacity: 0.7;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, background-color 0.2s;
   border-radius: 50%;
 }
 
-.trigger:hover, .trigger.active {
+.menuButton:hover {
   opacity: 1;
   background-color: rgba(255, 255, 255, 0.05);
 }
@@ -27,47 +27,64 @@
 .dropdown {
   position: absolute;
   top: 100%;
-  left: 0;
+  right: 0;
   margin-top: 0.5rem;
   background-color: var(--bar-color);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-medium);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   min-width: 160px;
-  overflow: hidden;
   z-index: 100;
+  overflow: hidden;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
-.menuItem {
+.dropdownItem {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.8rem;
   background: none;
   border: none;
   color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 0.95rem;
-  text-align: right;
   transition: background-color 0.2s;
+  border-radius: var(--radius-small);
+  text-align: right;
+  direction: rtl;
 }
 
-.menuItem:hover {
+.dropdownItem:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-.menuItem.delete {
-  color: #ff4d4d;
+.dropdownItem svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  opacity: 0.8;
 }
 
-.menuItem.delete:hover {
-  background-color: rgba(255, 77, 77, 0.1);
+.dropdownItem.delete {
+  color: #ff4d4f;
 }
 
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
+.dropdownItem.delete:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.dropdownItem.delete svg {
+  color: #ff4d4f;
+}
+
+@media (max-width: 768px) {
+  .dropdown {
+    right: auto;
+    left: 0;
+  }
 }

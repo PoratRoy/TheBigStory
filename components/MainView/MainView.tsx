@@ -19,7 +19,6 @@ export default function MainView() {
   if (isLoading) {
     return (
       <div className={styles.loading}>
-        <Icons.Reorder />
         <p>טוען את הסיפור שלך...</p>
       </div>
     );

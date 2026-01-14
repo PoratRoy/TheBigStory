@@ -1,24 +1,20 @@
-'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from '@/style/icons';
-import styles from './CategoryActions.module.css';
+import styles from './CategoryMenu.module.css';
 
-interface CategoryActionsProps {
+interface CategoryMenuProps {
   onEdit: () => void;
   onDelete: () => void;
 }
 
-export const CategoryActions: React.FC<CategoryActionsProps> = ({ onEdit, onDelete }) => {
+export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onEdit, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -31,19 +27,27 @@ export const CategoryActions: React.FC<CategoryActionsProps> = ({ onEdit, onDele
     };
   }, [isOpen]);
 
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setIsOpen(false);
+    }
+  };
+
   const handleAction = (action: () => void) => {
-    setIsOpen(false);
     action();
+    setIsOpen(false);
   };
 
   return (
-    <div className={styles.container} ref={containerRef}>
-      <button 
-        className={`${styles.dotsButton} ${isOpen ? styles.dotsButtonActive : ''}`}
+    <div className={styles.container} ref={menuRef} onKeyDown={handleKeyDown}>
+      <button
+        className={styles.menuButton}
         onClick={toggleMenu}
-        aria-expanded={isOpen}
         aria-haspopup="true"
-        aria-label="פעולות קטגוריה"
+        aria-expanded={isOpen}
+        aria-label="אפשרויות קטגוריה"
       >
         <Icons.Dots />
       </button>
@@ -52,26 +56,28 @@ export const CategoryActions: React.FC<CategoryActionsProps> = ({ onEdit, onDele
         {isOpen && (
           <motion.div
             className={styles.dropdown}
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
             role="menu"
+            aria-orientation="vertical"
           >
-            <button 
-              className={styles.menuItem} 
+            <button
+              className={styles.dropdownItem}
               onClick={() => handleAction(onEdit)}
               role="menuitem"
+              autoFocus
             >
-              <span className={styles.icon}><Icons.Update /></span>
+              <Icons.Update />
               <span>ערוך תקופה</span>
             </button>
-            <button 
-              className={`${styles.menuItem} ${styles.deleteItem}`} 
+            <button
+              className={`${styles.dropdownItem} ${styles.delete}`}
               onClick={() => handleAction(onDelete)}
               role="menuitem"
             >
-              <span className={styles.icon}><Icons.Delete /></span>
+              <Icons.Delete />
               <span>מחק תקופה</span>
             </button>
           </motion.div>

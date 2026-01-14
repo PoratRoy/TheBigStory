@@ -74,7 +74,7 @@ export const EventBox = ({
             onPointerDown={(e) => dragControls?.start(e)}
             style={{ touchAction: 'none' }}
           >
-            <Icons.Dots />
+            <Icons.Reorder />
           </div>
           <div className={styles.collapsedContent} onClick={toggleCollapse}>
             <p className={styles.collapsedText}>{stripHtml(localText)}</p>
@@ -92,7 +92,7 @@ export const EventBox = ({
                 onPointerDown={(e) => dragControls?.start(e)}
                 style={{ touchAction: 'none' }}
               >
-                <Icons.Dots />
+                <Icons.Reorder />
               </div>
               <div className={styles.categoryPills}>
                 {categories.map(cat => (

@@ -10,10 +10,10 @@ v - no need rich text editor
 v - category - clear the input after submit
 v - category - minimaze the add event section
 v - category - add ellipse to the title
-- all the category layout is mass up on mobile when typing
-- category - on mobile the edit and delete are under 3 dots dropdown
+v - all the category layout is mass up on mobile when typing
+v - category - on mobile the edit and delete are under 3 dots dropdown
+v - add number of events in each category (only on grid)
 - option to update the event categories
-- add number of events in each category (only on grid)
 
 - timeline - I only see from 2004 and not from 1998
 - category - top bar icon to show simple list of all the events as read only

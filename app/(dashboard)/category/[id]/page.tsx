@@ -11,6 +11,7 @@ import { Button } from '@/components/Form/Button';
 import { Event } from '@/models/interface/event';
 import { EventItem } from './EventItem';
 import { AddEventCard } from './AddEventCard';
+import { CategoryMenu } from './CategoryMenu';
 import styles from './page.module.css';
 
 export default function CategoryDetailPage() {
@@ -115,22 +116,10 @@ export default function CategoryDetailPage() {
           <h1 className={styles.title}>
             {category.name} | {category.startYear}-{category.endYear || 'היום'}
           </h1>
-          <div className={styles.headerActions}>
-            <button 
-              onClick={handleEditCategory} 
-              className={styles.iconButton} 
-              title="ערוך תקופה"
-            >
-              <Icons.Update />
-            </button>
-            <button 
-              onClick={handleDeleteCategory} 
-              className={styles.iconButton} 
-              title="מחק תקופה"
-            >
-              <Icons.Delete />
-            </button>
-          </div>
+          <CategoryMenu 
+            onEdit={handleEditCategory} 
+            onDelete={handleDeleteCategory} 
+          />
         </div>
         <button onClick={() => router.back()} className={styles.backButton} aria-label="חזור">
           <Icons.Back />
