@@ -13,13 +13,13 @@ v - category - add ellipse to the title
 v - all the category layout is mass up on mobile when typing
 v - category - on mobile the edit and delete are under 3 dots dropdown
 v - add number of events in each category (only on grid)
+v - settings page 
+v - timeline - jump to the defualt snap year
 - option to update the event categories
 
 - timeline - I only see from 2004 and not from 1998
 - category - top bar icon to show simple list of all the events as read only
 - category - implement move functionalty
-- settings page 
-- timeline - jump to the defualt snap year
 - query params
 - slow
 - reorder the timeline stack

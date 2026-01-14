@@ -10,7 +10,7 @@ import { deleteCategoryAction } from '@/app/actions/DELETE/deleteCategoryAction'
 import { createEventAction } from '@/app/actions/POST/createEventAction';
 import { updateEventAction } from '@/app/actions/POST/updateEventAction';
 import { deleteEventAction } from '@/app/actions/DELETE/deleteEventAction';
-import { reorderEventPosAction } from '@/app/actions/POST/reorderEventPosAction';
+import { updateTimelineAction } from '@/app/actions/POST/updateTimelineAction';
 import { Timeline } from '@/models/interface/timeline';
 import { Category } from '@/models/interface/category';
 import { Event } from '@/models/interface/event';
@@ -31,6 +31,7 @@ interface TimelineContextType {
   editEvent: (id: string, data: any) => Promise<{ success?: boolean; error?: string }>;
   removeEvent: (id: string) => Promise<{ success?: boolean; error?: string }>;
   reorderEvents: (eventIds: string[]) => Promise<{ success?: boolean; error?: string }>;
+  updateTimelineSettings: (data: { startYear?: number; snapDefault?: number }) => Promise<{ success?: boolean; error?: string }>;
 }
 
 const TimelineContext = createContext<TimelineContextType | undefined>(undefined);
@@ -147,6 +148,15 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
     return res;
   };
 
+  const updateTimelineSettings = async (data: { startYear?: number; snapDefault?: number }) => {
+    const res = await updateTimelineAction(data);
+    if (res.success && res.data) {
+      setTimeline(res.data as Timeline);
+      await refreshData();
+    }
+    return res;
+  };
+
   return (
     <TimelineContext.Provider value={{
       timeline,
@@ -163,7 +173,8 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
       addNewEvent,
       editEvent,
       removeEvent,
-      reorderEvents
+      reorderEvents,
+      updateTimelineSettings
     }}>
       {children}
     </TimelineContext.Provider>

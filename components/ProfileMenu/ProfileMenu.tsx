@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Icons } from '@/style/icons';
 import styles from './ProfileMenu.module.css';
@@ -40,6 +41,14 @@ export default function ProfileMenu() {
 
             <nav>
               <ul className={styles.menuList}>
+                <li className={styles.menuItem}>
+                  <Link href="/settings" className={styles.menuLink} onClick={() => setIsOpen(false)}>
+                    <span className={styles.menuIcon}>
+                      <Icons.Update />
+                    </span>
+                    <span>הגדרות</span>
+                  </Link>
+                </li>
                 <li className={styles.menuItem}>
                   <button 
                     onClick={() => signOut({ callbackUrl: '/sign-in' })} 

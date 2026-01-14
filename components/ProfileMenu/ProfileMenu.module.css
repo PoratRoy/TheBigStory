@@ -120,9 +120,21 @@
   opacity: 0.8;
 }
 
-.logoutIcon {
+.logoutIcon,
+.menuIcon {
   font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoutIcon {
   color: #ef4444;
+}
+
+.menuIcon {
+  color: var(--text-color);
+  opacity: 0.8;
 }
 
 .userName {

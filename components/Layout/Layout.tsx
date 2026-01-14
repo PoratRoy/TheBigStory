@@ -18,7 +18,11 @@ export default function Layout({ children }: LayoutProps) {
   const pathname = usePathname();
 
   // Define paths that should hide the global TopBar and BottomBar
-  const isFormPage = pathname === '/add-event' || pathname === '/add-category';
+  const isFormPage = 
+    pathname === '/add-event' || 
+    pathname === '/add-category' || 
+    pathname === '/settings' ||
+    pathname.startsWith('/edit-category/');
 
   if (isFormPage) {
     return <div className={styles.layout} dir="rtl">{children}</div>;

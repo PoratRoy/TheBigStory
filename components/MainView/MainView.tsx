@@ -13,7 +13,7 @@ export default function MainView() {
   const { viewMode, searchQuery } = useLayout();
 
   const filteredCategories = categories.filter(category => 
-    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+    !category.isUnique && category.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (isLoading) {
