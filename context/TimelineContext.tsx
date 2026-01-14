@@ -18,6 +18,7 @@ import { Event } from '@/models/interface/event';
 interface TimelineContextType {
   timeline: Timeline | null;
   categories: Category[];
+  usedColors: string[];
   events: Event[];
   yearOptions: { value: number; label: number }[];
   isLoading: boolean;
@@ -41,6 +42,10 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
   const [yearOptions, setYearOptions] = useState<{ value: number; label: number }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const usedColors = React.useMemo(() => {
+    return categories.map(cat => cat.color).filter(Boolean) as string[];
+  }, [categories]);
 
   const refreshData = useCallback(async (isInitial = false) => {
     if (isInitial) setIsLoading(true);
@@ -146,6 +151,7 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
     <TimelineContext.Provider value={{
       timeline,
       categories,
+      usedColors,
       events,
       yearOptions,
       isLoading,

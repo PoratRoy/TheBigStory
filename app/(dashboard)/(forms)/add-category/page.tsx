@@ -15,7 +15,7 @@ import formStyles from '@/components/Form/Form.module.css';
 export default function AddCategoryPage() {
   const router = useRouter();
   const { setTitle } = useFormLayout();
-  const { timeline, yearOptions, addNewCategory } = useTimeline();
+  const { timeline, yearOptions, addNewCategory, usedColors } = useTimeline();
 
   const currentYear = new Date().getFullYear();
   const timelineStartYear = timeline?.startYear || 1998;
@@ -28,8 +28,8 @@ export default function AddCategoryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setColor(getRandomColor());
-  }, []);
+    setColor(getRandomColor(usedColors));
+  }, [usedColors]);
 
   useEffect(() => {
     if (timeline?.startYear) {
@@ -55,7 +55,7 @@ export default function AddCategoryPage() {
   };
 
   const handleRandomColor = () => {
-    setColor(getRandomColor());
+    setColor(getRandomColor(usedColors));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

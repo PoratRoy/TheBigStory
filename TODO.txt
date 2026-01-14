@@ -4,14 +4,30 @@ v - category - move the add event item to the bottom as fixed
 v - category - handel reorder and poistion (newes is on top)
 v - grid + timeline - add the option to delete category
 v - improve colors
-- category - clear the input after submit
-- category - minimaze the add event section
+v - more colors
+v - save in state the timeline colors and do not show them as options in the add category
+v - no need rich text editor
+v - category - clear the input after submit
+v - category - minimaze the add event section
+v - category - add ellipse to the title
+- all the category layout is mass up on mobile when typing
+- category - on mobile the edit and delete are under 3 dots dropdown
+- option to update the event categories
+- add number of events in each category (only on grid)
+
+- timeline - I only see from 2004 and not from 1998
 - category - top bar icon to show simple list of all the events as read only
-- category - add ellipse to the title
 - category - implement move functionalty
 - settings page 
 - timeline - jump to the defualt snap year
 - query params
 - slow
+- reorder the timeline stack
+
+- מביך
+- מיוחד
+- לספר
+- גדול
+- מצחיק
 
 - add uniqe categories and show them on the hamburger

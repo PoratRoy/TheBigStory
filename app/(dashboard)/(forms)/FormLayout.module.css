@@ -53,4 +53,11 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .formArea {
+    padding: 1rem 0.5rem;
+  }
 }

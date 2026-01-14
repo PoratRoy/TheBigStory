@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTimeline } from '@/context/TimelineContext';
-import RichTextEditor from '@/components/Form/RichTextEditor/RichTextEditor';
+import { TextArea } from '@/components/Form/TextArea';
+import { Icons } from '@/style/icons';
 import styles from './AddEventCard.module.css';
 
 interface AddEventCardProps {
@@ -15,6 +17,7 @@ export function AddEventCard({ currentCategoryId }: AddEventCardProps) {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([currentCategoryId]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   // Ensure current category is always selected
   useEffect(() => {
@@ -41,9 +44,10 @@ export function AddEventCard({ currentCategoryId }: AddEventCardProps) {
     );
   };
 
-  const handleSave = async () => {
-    const strippedContent = text.replace(/<[^>]*>?/gm, '').trim();
-    if (!strippedContent) {
+  const handleSave = async (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    
+    if (!text.trim()) {
       setError('אנא הכנס טקסט לאירוע');
       return;
     }
@@ -68,9 +72,9 @@ export function AddEventCard({ currentCategoryId }: AddEventCardProps) {
   };
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${!isExpanded ? styles.collapsedCard : ''}`}>
       {/* 1. Categories Row + Add Button (Top) */}
-      <div className={styles.topRow}>
+      <div className={styles.topRow} onClick={() => !isExpanded && setIsExpanded(true)}>
         <button 
           className={styles.addBtn} 
           onClick={handleSave}
@@ -88,11 +92,14 @@ export function AddEventCard({ currentCategoryId }: AddEventCardProps) {
             <button
               key={cat.id}
               type="button"
-              onClick={() => toggleCategory(cat.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCategory(cat.id);
+              }}
               className={`${styles.categoryTag} ${selectedCategoryIds.includes(cat.id) ? styles.selected : ''}`}
               style={{ 
                 backgroundColor: selectedCategoryIds.includes(cat.id) ? cat.color || '#3b82f6' : 'rgba(255,255,255,0.05)',
-                borderColor: cat.color || '#3b82f6',
+                borderColor: selectedCategoryIds.includes(cat.id) ? cat.color || '#3b82f6' : 'transparent',
                 color: selectedCategoryIds.includes(cat.id) ? 'white' : 'var(--text-color)'
               }}
             >
@@ -100,19 +107,47 @@ export function AddEventCard({ currentCategoryId }: AddEventCardProps) {
             </button>
           ))}
         </div>
+
+        <button 
+          className={styles.collapseBtn} 
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(!isExpanded);
+          }}
+          aria-label={isExpanded ? "Collapse" : "Expand"}
+        >
+          {isExpanded ? <Icons.ChevronDown /> : <Icons.ChevronUp />}
+        </button>
       </div>
 
-      {/* 2. Text area (RichTextEditor) - No padding wrapper */}
-      <div className={styles.editorWrapper}>
-        <RichTextEditor 
-          value={text} 
-          onChange={setText} 
-          placeholder="מה קרה הפעם? ספר את הסיפור..."
-          isSmall
-        />
-      </div>
-      
-      {error && <div className={styles.errorContainer}><p className={styles.errorText}>{error}</p></div>}
+      {/* 2. Animated Content Area */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className={styles.animatedContent}
+          >
+            <div className={styles.editorWrapper}>
+              <TextArea 
+                value={text} 
+                onChange={setText} 
+                placeholder="מה קרה הפעם? ספר את הסיפור..."
+                isSmall
+                autoResize
+              />
+            </div>
+            
+            {error && (
+              <div className={styles.errorContainer}>
+                <p className={styles.errorText}>{error}</p>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

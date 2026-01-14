@@ -17,6 +17,34 @@
   direction: rtl;
   background-color: rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.collapsedCard .topRow {
+  border-bottom: none;
+}
+
+.collapseBtn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.collapseBtn:hover {
+  opacity: 1;
+}
+
+.animatedContent {
+  overflow: hidden;
+  width: 100%;
 }
 
 .addBtn {

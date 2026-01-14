@@ -6,7 +6,6 @@ import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
-import sanitizeHtml from 'sanitize-html';
 
 export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'categories'>> & { categoryIds?: string[] }) {
   try {
@@ -14,13 +13,9 @@ export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'ca
 
     const user = await getAuthenticatedUser();
     
-    // Sanitize the HTML content before saving to the database
-    const sanitizedText = sanitizeHtml(formData.text, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['u']),
-      allowedAttributes: {
-        '*': ['style', 'class'],
-      }
-    });
+    // No longer using sanitize-html since we switched to plain text TextArea.
+    // The text will be rendered using white-space: pre-wrap for safety and layout.
+    const text = formData.text.trim();
 
     // Shift all existing events for this user to make room for the new one at position 0
     await db.update(events)
@@ -29,7 +24,7 @@ export async function createEventAction(formData: Partial<Omit<Event, 'id' | 'ca
 
     const [newEvent] = await db.insert(events).values({
       userId: user.id,
-      text: sanitizedText,
+      text: text,
       position: 0, // Always start at the top
     }).returning();
 

@@ -6,23 +6,17 @@ import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getAuthenticatedUser } from '../utils';
 import { Event } from '@/models/interface/event';
-import sanitizeHtml from 'sanitize-html';
 
 export async function updateEventAction(id: string, formData: Partial<Omit<Event, 'id' | 'categories'>> & { categoryIds?: string[] }) {
   try {
     const user = await getAuthenticatedUser();
 
-    // Sanitize the HTML content before saving
-    const sanitizedText = formData.text ? sanitizeHtml(formData.text, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['u']),
-      allowedAttributes: {
-        '*': ['style', 'class'],
-      }
-    }) : undefined;
+    // No longer using sanitize-html for plain text.
+    const text = formData.text?.trim();
 
     const [updatedEvent] = await db.update(events)
       .set({
-        text: sanitizedText,
+        text: text,
         position: formData.position,
         isCollapse: formData.isCollapse,
         updatedAt: new Date(),

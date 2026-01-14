@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { DragControls } from 'framer-motion';
 import { Icons } from '@/style/icons';
-import RichTextEditor from '@/components/Form/RichTextEditor/RichTextEditor';
+import { TextArea } from '@/components/Form/TextArea';
 import styles from './EventBox.module.css';
 
 interface CategoryPill {
@@ -17,7 +17,7 @@ interface EventBoxProps {
   text: string;
   isCollapse: boolean;
   categories: CategoryPill[];
-  dragControls?: DragControls; // Add dragControls prop
+  dragControls?: DragControls;
   onDelete: (id: string) => void;
   onToggleCollapse: (id: string, state: boolean) => void;
   onMove: (id: string) => void;
@@ -36,7 +36,18 @@ export const EventBox = ({
   onEdit
 }: EventBoxProps) => {
   const [isCollapsed, setIsCollapsed] = useState(initialCollapse);
-  const [localText, setLocalText] = useState(text);
+
+  // Helper to strip HTML tags for older events if they still have HTML
+  const stripHtml = (html: string) => {
+    if (typeof window === 'undefined') return html;
+    // Check if it's likely HTML
+    if (!html.includes('<') || !html.includes('>')) return html;
+    const tmp = document.createElement('DIV');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
+  const [localText, setLocalText] = useState(() => stripHtml(text));
 
   const toggleCollapse = () => {
     const newState = !isCollapsed;
@@ -45,21 +56,13 @@ export const EventBox = ({
   };
 
   const handleBlur = (newText: string) => {
-    if (newText !== text && onEdit) {
+    if (newText !== stripHtml(text) && onEdit) {
       onEdit(id, newText);
     }
   };
 
   const handleTextChange = (newText: string) => {
     setLocalText(newText);
-  };
-
-  // Helper to strip HTML tags for collapsed view
-  const stripHtml = (html: string) => {
-    if (typeof window === 'undefined') return html;
-    const tmp = document.createElement('DIV');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
   };
 
   return (
@@ -119,13 +122,18 @@ export const EventBox = ({
           </div>
 
           <div className={styles.content}>
-            <RichTextEditor 
-              value={localText} 
-              onChange={handleTextChange} 
-              onBlur={handleBlur}
-              isSmall
-              placeholder="ספר את הסיפור שלך..."
-            />
+            {onEdit ? (
+              <TextArea 
+                value={localText} 
+                onChange={handleTextChange} 
+                onBlur={handleBlur}
+                isSmall
+                autoResize
+                placeholder="ספר את הסיפור שלך..."
+              />
+            ) : (
+              <p className={styles.eventText}>{localText}</p>
+            )}
           </div>
         </>
       )}

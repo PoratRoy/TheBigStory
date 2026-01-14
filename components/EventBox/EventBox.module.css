@@ -92,6 +92,14 @@
   text-align: right;
   color: var(--text-color);
   line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.eventText {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .collapsedRow {

@@ -4,8 +4,9 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTimeline } from '@/context/TimelineContext';
 import { useFormLayout } from '@/context/FormLayoutContext';
-import RichTextEditor from '@/components/Form/RichTextEditor/RichTextEditor';
+import { TextArea } from '@/components/Form/TextArea';
 import { Button } from '@/components/Form/Button';
+import { CategoryPicker } from '@/components/Form/CategoryPicker';
 import styles from './page.module.css';
 import formStyles from '@/components/Form/Form.module.css';
 
@@ -27,26 +28,17 @@ function AddEventForm() {
     const categoryId = searchParams.get('categoryId');
     if (categoryId) {
       setSelectedCategoryIds([categoryId]);
-    } else if (categories.length > 0) {
-      // Default to first category if none provided
+    } else if (categories.length > 0 && selectedCategoryIds.length === 0) {
+      // Default to first category if none provided and none selected yet
       setSelectedCategoryIds([categories[0].id]);
     }
-  }, [setTitle, searchParams, categories]);
-
-  const toggleCategory = (id: string) => {
-    setSelectedCategoryIds(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id) 
-        : [...prev, id]
-    );
-  };
+  }, [setTitle, searchParams, categories, selectedCategoryIds.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
-    const strippedContent = text.replace(/<[^>]*>?/gm, '').trim();
-    if (!strippedContent) {
+    if (!text.trim()) {
       setError('אנא הכנס טקסט לאירוע');
       return;
     }
@@ -76,39 +68,22 @@ function AddEventForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={formStyles.formCard}>
+    <form onSubmit={handleSubmit} className={`${formStyles.formCard} ${styles.fullHeightCard}`}>
       <div className={styles.form}>
         <div className={styles.editorContainer}>
-          <RichTextEditor 
+          <TextArea 
             value={text} 
             onChange={setText} 
             placeholder="מה קרה הפעם? ספר את הסיפור..."
+            fullHeight
           />
         </div>
 
-        <div className={styles.categorySection}>
-          <h3 className={styles.sectionTitle}>שיוך לקטגוריות</h3>
-          <div className={styles.categoryList}>
-            {categories.map(cat => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => toggleCategory(cat.id)}
-                className={`${styles.categoryTag} ${selectedCategoryIds.includes(cat.id) ? styles.selected : ''}`}
-                style={{ 
-                  backgroundColor: selectedCategoryIds.includes(cat.id) ? cat.color || '#3b82f6' : 'rgba(255,255,255,0.05)',
-                  borderColor: cat.color || '#3b82f6',
-                  color: selectedCategoryIds.includes(cat.id) ? 'white' : 'var(--text-color)'
-                }}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
-          {categories.length === 0 && (
-            <p className={styles.emptyText}>אין קטגוריות זמינות. אנא צור קטגוריה תחילה.</p>
-          )}
-        </div>
+        <CategoryPicker 
+          categories={categories}
+          selectedIds={selectedCategoryIds}
+          onChange={setSelectedCategoryIds}
+        />
 
         {error && <p className={styles.errorText}>{error}</p>}
 

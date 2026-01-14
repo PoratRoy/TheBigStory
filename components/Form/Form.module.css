@@ -108,6 +108,15 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
+@media (max-width: 768px) {
+  .formCard {
+    padding: 1.25rem;
+    gap: 1.25rem;
+    width: calc(100% - 1rem);
+    margin: 0 auto;
+  }
+}
+
 .formActions {
   margin-top: 1rem;
   display: flex;

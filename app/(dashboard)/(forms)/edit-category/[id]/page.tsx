@@ -16,7 +16,7 @@ export default function EditCategoryPage() {
   const router = useRouter();
   const { id } = useParams();
   const { setTitle } = useFormLayout();
-  const { categories, yearOptions, editCategory, isLoading } = useTimeline();
+  const { categories, usedColors, yearOptions, editCategory, isLoading } = useTimeline();
 
   const [name, setName] = useState('');
   const [startYear, setStartYear] = useState(1998);
@@ -56,7 +56,7 @@ export default function EditCategoryPage() {
   };
 
   const handleRandomColor = () => {
-    setColor(getRandomColor());
+    setColor(getRandomColor(usedColors));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

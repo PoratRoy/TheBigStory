@@ -42,12 +42,35 @@ export const CATEGORY_COLORS = [
   // Deep Ocean
   '#020617', '#082f49', '#111827', '#022c22',
   // Deep Forest
-  '#052e16', '#064e3b', '#022c22', '#14532d',
+  '#052e16',
   // Deep Royal
   '#1e1b4b', '#2e1065', '#3b0764', '#4c0519',
+  // Deep Maroon & Burgundy
+  '#450a0a', '#4c0505', '#630606', '#540b0b',
+  // Deep Olive & Moss
+  '#1a2e05', '#242c16', '#1c1917',
+  // Deep Navy & Charcoal
+  '#171717',
+  // Deep Plum & Eggplant
+  '#300720', '#4a044e',
+  // Deep Vibrant Dark
+  '#500724',
+  // Added unique tones
+  '#083344', '#155e75', '#164e63', '#0e7490',
+  '#1e1b4b', '#312e81', '#3730a3', '#4338ca',
+  '#2e1065', '#4c1d95', '#5b21b6', '#6d28d9',
+  '#4c0519', '#831843', '#9d174d', '#be185d',
+  '#500724', '#881337', '#9f1239', '#be123c',
+  '#310a0a', '#450a0a', '#7f1d1d', '#991b1b',
+  '#300720', '#4d072b', '#701a75', '#86198f',
+  '#052e16', '#064e3b', '#065f46', '#0f766e',
+  '#1a2e05', '#365314', '#3f6212', '#4d7c0f',
+  '#2d2006', '#422006', '#713f12', '#854d0e',
 ];
 
-export const getRandomColor = () => {
-  const randomIndex = Math.floor(Math.random() * CATEGORY_COLORS.length);
-  return CATEGORY_COLORS[randomIndex];
+export const getRandomColor = (excludeColors: string[] = []) => {
+  const availableColors = CATEGORY_COLORS.filter(color => !excludeColors.includes(color));
+  const listToUse = availableColors.length > 0 ? availableColors : CATEGORY_COLORS;
+  const randomIndex = Math.floor(Math.random() * listToUse.length);
+  return listToUse[randomIndex];
 };
