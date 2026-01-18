@@ -9,7 +9,7 @@ interface EventItemProps {
   event: Event;
   onDelete: (id: string) => void;
   onToggleCollapse: (id: string, state: boolean) => void;
-  onMove: (id: string) => void;
+  onEditFull: (id: string) => void;
   onEdit: (id: string, text: string) => void;
 }
 
@@ -17,7 +17,7 @@ export function EventItem({
   event, 
   onDelete, 
   onToggleCollapse, 
-  onMove,
+  onEditFull,
   onEdit
 }: EventItemProps) {
   const dragControls = useDragControls();
@@ -37,7 +37,7 @@ export function EventItem({
         dragControls={dragControls}
         onDelete={onDelete}
         onToggleCollapse={onToggleCollapse}
-        onMove={onMove}
+        onEditFull={onEditFull}
         onEdit={onEdit}
       />
     </Reorder.Item>

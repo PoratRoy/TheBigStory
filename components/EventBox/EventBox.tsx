@@ -20,7 +20,7 @@ interface EventBoxProps {
   dragControls?: DragControls;
   onDelete: (id: string) => void;
   onToggleCollapse: (id: string, state: boolean) => void;
-  onMove: (id: string) => void;
+  onEditFull: (id: string) => void;
   onEdit?: (id: string, text: string) => void;
 }
 
@@ -32,7 +32,7 @@ export const EventBox = ({
   dragControls,
   onDelete,
   onToggleCollapse,
-  onMove,
+  onEditFull,
   onEdit
 }: EventBoxProps) => {
   const [isCollapsed, setIsCollapsed] = useState(initialCollapse);
@@ -109,8 +109,8 @@ export const EventBox = ({
             </div>
 
             <div className={styles.actionsLeft}>
-              <button className={styles.iconButton} onClick={() => onMove(id)} aria-label="Move to category">
-                <Icons.Move />
+              <button className={styles.iconButton} onClick={() => onEditFull(id)} aria-label="Edit details">
+                <Icons.Update />
               </button>
               <button className={styles.iconButton} onClick={() => onDelete(id)} aria-label="Delete">
                 <Icons.Delete />

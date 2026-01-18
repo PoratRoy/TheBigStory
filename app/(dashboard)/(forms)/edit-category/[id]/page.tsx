@@ -56,10 +56,6 @@ export default function EditCategoryPage() {
     setEndYear(parseInt(e.target.value));
   };
 
-  const handleRandomColor = () => {
-    setColor(getRandomColor(usedColors));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -126,7 +122,6 @@ export default function EditCategoryPage() {
         label="צבע"
         value={color}
         onChange={setColor}
-        onRandom={handleRandomColor}
       />
 
       {error && <p className={styles.errorText}>{error}</p>}

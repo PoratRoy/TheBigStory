@@ -24,13 +24,15 @@ export default function AddCategoryPage() {
   const [name, setName] = useState('');
   const [startYear, setStartYear] = useState(timelineStartYear);
   const [endYear, setEndYear] = useState(currentYear);
-  const [color, setColor] = useState('#3b82f6'); // Temporary, will update in useEffect
+  const [color, setColor] = useState('#3b82f6');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setColor(getRandomColor(usedColors));
-  }, [usedColors]);
+    if (!name && !isSubmitting) {
+      setColor(getRandomColor(usedColors));
+    }
+  }, [usedColors, name, isSubmitting]);
 
   useEffect(() => {
     if (timeline?.startYear) {
@@ -53,10 +55,6 @@ export default function AddCategoryPage() {
 
   const handleEndYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setEndYear(parseInt(e.target.value));
-  };
-
-  const handleRandomColor = () => {
-    setColor(getRandomColor(usedColors));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,7 +115,6 @@ export default function AddCategoryPage() {
         label="צבע"
         value={color}
         onChange={setColor}
-        onRandom={handleRandomColor}
       />
 
       {error && <p className={styles.errorText}>{error}</p>}

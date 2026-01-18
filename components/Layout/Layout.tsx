@@ -23,7 +23,8 @@ export default function Layout({ children }: LayoutProps) {
     pathname === '/add-category' || 
     pathname === '/settings' ||
     pathname === '/manage-uniqe' ||
-    pathname.startsWith('/edit-category/');
+    pathname.startsWith('/edit-category/') ||
+    pathname.startsWith('/edit-event/');
 
   if (isFormPage) {
     return <div className={styles.layout} dir="rtl">{children}</div>;

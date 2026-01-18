@@ -90,8 +90,8 @@ export default function CategoryDetailPage() {
     await editEvent(eventId, { text });
   };
 
-  const handleMove = (eventId: string) => {
-    console.log('Move event:', eventId);
+  const handleEditFull = (eventId: string) => {
+    router.push(`/edit-event/${eventId}`);
   };
 
   if (isLoading) {
@@ -154,7 +154,7 @@ export default function CategoryDetailPage() {
                 event={event}
                 onDelete={handleDelete}
                 onToggleCollapse={handleToggleCollapse}
-                onMove={handleMove}
+                onEditFull={handleEditFull}
                 onEdit={handleEdit}
               />
             ))}

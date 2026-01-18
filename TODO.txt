@@ -18,17 +18,21 @@ v - timeline - jump to the defualt snap year
 v - timeline - I only see from 2004 and not from 1998
 v - add uniqe categories and show them on the hamburger
 v - category - top bar icon to show simple list of all the events as read only
+v - category - implement move functionalty
+v - option to update the event categories
 
-- option to update the event categories
-- category - implement move functionalty
+- hamburger layout z index
+- category return to main (not to the last page)
+- improve icons - story, 3 dots 
+- hard to select categories when create new event
 - query params
 - slow
 - reorder the timeline stack
 
-- מביך
-- מיוחד
-- לספר
-- גדול
-- מצחיק
+v - מביך
+v - מיוחד
+v - לספר
+v - גדול
+v - מצחיק
 
 

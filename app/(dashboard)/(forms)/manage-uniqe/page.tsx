@@ -9,6 +9,7 @@ import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Form/Button';
 import { ColorPicker } from '@/components/Form/ColorPicker';
 import { Icons } from '@/style/icons';
+import { getRandomColor } from '@/style/colors';
 import styles from './page.module.css';
 
 export default function ManageCategoriesPage() {
@@ -27,23 +28,10 @@ export default function ManageCategoriesPage() {
 
   useEffect(() => {
     setTitle('ניהול קטגוריות');
-  }, [setTitle]);
-
-  const generateRandomColor = () => {
-    const colors = [
-      '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', 
-      '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#0ea5e9'
-    ];
-    const availableColors = colors.filter(c => !usedColors.includes(c));
-    const pool = availableColors.length > 0 ? availableColors : colors;
-    return pool[Math.floor(Math.random() * pool.length)];
-  };
-
-  const handleRandomColor = (isEditing: boolean) => {
-    const color = generateRandomColor();
-    if (isEditing) setEditingColor(color);
-    else setNewUniqueColor(color);
-  };
+    if (!isAddingUnique) {
+      setNewUniqueColor(getRandomColor(usedColors));
+    }
+  }, [setTitle, usedColors, isAddingUnique]);
 
   const handleStartEditing = (cat: any) => {
     setEditingCategoryId(cat.id);
@@ -110,7 +98,6 @@ export default function ManageCategoriesPage() {
                     label="צבע" 
                     value={editingColor} 
                     onChange={setEditingColor}
-                    onRandom={() => handleRandomColor(true)}
                   />
                   <div className={styles.formActions}>
                     <Button variant="secondary" onClick={() => setEditingCategoryId(null)}>ביטול</Button>
@@ -152,7 +139,6 @@ export default function ManageCategoriesPage() {
               label="צבע" 
               value={newUniqueColor} 
               onChange={setNewUniqueColor}
-              onRandom={() => handleRandomColor(false)}
             />
             <div className={styles.formActions}>
               <Button variant="secondary" onClick={() => setIsAddingUnique(false)}>ביטול</Button>
