@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import { useTimeline } from '@/context/TimelineContext';
 import { useFormLayout } from '@/context/FormLayoutContext';
 import { TextArea } from '@/components/Form/TextArea';
@@ -58,11 +59,12 @@ function AddEventForm() {
     });
 
     if (result.success) {
+      toast.success('אירוע נשמר');
       // Navigate back to the first selected category's page or home
       const returnId = selectedCategoryIds[0];
       router.push(`/category/${returnId}`);
     } else {
-      setError(result.error || 'שגיאה בשמירת האירוע');
+      toast.error(result.error || 'שגיאה בשמירת האירוע');
       setIsSubmitting(false);
     }
   };

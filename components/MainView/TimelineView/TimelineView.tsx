@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Category } from '@/models/interface/category';
+import { useTimeline } from '@/context/TimelineContext';
 import { useLayout } from '@/context/LayoutContext';
 import styles from './TimelineView.module.css';
 
@@ -10,21 +11,46 @@ interface TimelineViewProps {
 
 export const TimelineView = ({ categories }: TimelineViewProps) => {
   const router = useRouter();
+  const { timeline } = useTimeline();
   const { searchQuery } = useLayout();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const hasInitialScrolled = useRef(false);
   const YEAR_WIDTH = 160;
 
   const timelineYears = useMemo(() => {
-    const currentYear = 2026;
-    const minYear = categories.length > 0 ? Math.min(...categories.map(c => c.startYear || currentYear)) : 1998;
-    const maxYear = 2026; // Always till current year as requested
+    const currentYear = new Date().getFullYear();
+    const minYear = timeline?.startYear || 1998;
+    const maxYear = currentYear;
     
     const years = [];
     for (let y = minYear; y <= maxYear; y++) {
       years.push(y);
     }
     return { years, start: minYear };
-  }, [categories]);
+  }, [timeline?.startYear]);
+
+  // Jump to snapDefault on mount
+  useEffect(() => {
+    if (timeline?.snapDefault && wrapperRef.current && !hasInitialScrolled.current) {
+      const snapYear = timeline.snapDefault;
+      const startYear = timelineYears.start;
+      
+      const scrollPosition = (snapYear - startYear) * YEAR_WIDTH;
+      const containerWidth = wrapperRef.current.offsetWidth;
+      
+      const timer = setTimeout(() => {
+        if (wrapperRef.current) {
+          wrapperRef.current.scrollTo({
+            left: Math.max(0, scrollPosition - (containerWidth / 2) + (YEAR_WIDTH / 2)),
+            behavior: 'auto'
+          });
+          hasInitialScrolled.current = true;
+        }
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [timeline?.snapDefault, timelineYears.start]);
 
   // Jump to first filtered category when searching
   useEffect(() => {

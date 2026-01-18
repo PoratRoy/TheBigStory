@@ -6,9 +6,10 @@ import styles from './CategoryMenu.module.css';
 interface CategoryMenuProps {
   onEdit: () => void;
   onDelete: () => void;
+  onViewStory: () => void;
 }
 
-export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onEdit, onDelete }) => {
+export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onEdit, onDelete, onViewStory }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -65,9 +66,16 @@ export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onEdit, onDelete }) 
           >
             <button
               className={styles.dropdownItem}
+              onClick={() => handleAction(onViewStory)}
+              role="menuitem"
+            >
+              <Icons.List />
+              <span>קרא כסיפור</span>
+            </button>
+            <button
+              className={styles.dropdownItem}
               onClick={() => handleAction(onEdit)}
               role="menuitem"
-              autoFocus
             >
               <Icons.Update />
               <span>ערוך תקופה</span>

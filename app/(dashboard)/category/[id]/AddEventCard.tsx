@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 import { useTimeline } from '@/context/TimelineContext';
 import { TextArea } from '@/components/Form/TextArea';
 import { Icons } from '@/style/icons';
@@ -62,11 +63,12 @@ export function AddEventCard({ currentCategoryId }: AddEventCardProps) {
     });
 
     if (result.success) {
+      toast.success('אירוע נוסף');
       setText('');
       // Reset selected categories to just the current one
       setSelectedCategoryIds([currentCategoryId]);
     } else {
-      setError(result.error || 'שגיאה בשמירת האירוע');
+      toast.error(result.error || 'שגיאה בשמירת האירוע');
     }
     setIsSubmitting(false);
   };

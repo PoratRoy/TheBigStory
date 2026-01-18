@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import { Reorder, useDragControls } from 'framer-motion';
 import { useTimeline } from '@/context/TimelineContext';
 import { EventBox } from '@/components/EventBox/EventBox';
@@ -50,32 +51,35 @@ export default function CategoryDetailPage() {
     const eventIds = newOrder.map(e => e.id);
     const result = await reorderEvents(eventIds);
     if (!result.success) {
-      alert(result.error);
+      toast.error(result.error || 'שגיאה בשינוי סדר האירועים');
     }
   };
 
   const handleDelete = async (eventId: string) => {
-    if (confirm('האם אתה בטוח שברצונך למחוק אירוע זה?')) {
-      const result = await removeEvent(eventId);
-      if (!result.success) {
-        alert(result.error);
-      }
+    const result = await removeEvent(eventId);
+    if (result.success) {
+      toast.success('אירוע נמחק');
+    } else {
+      toast.error(result.error || 'שגיאה במחיקת אירוע');
     }
   };
 
   const handleDeleteCategory = async () => {
-    if (confirm(`האם אתה בטוח שברצונך למחוק את הקטגוריה "${category?.name}" ואת כל האירועים שלה? פעולה זו אינה ניתנת לביטול.`)) {
-      const result = await removeCategory(id as string);
-      if (result.success) {
-        router.push('/');
-      } else {
-        alert(result.error);
-      }
+    const result = await removeCategory(id as string);
+    if (result.success) {
+      toast.success('תקופה נמחקה');
+      router.push('/');
+    } else {
+      toast.error(result.error || 'שגיאה במחיקת תקופה');
     }
   };
 
   const handleEditCategory = () => {
     router.push(`/edit-category/${id}`);
+  };
+
+  const handleViewStory = () => {
+    router.push(`/category/${id}/story`);
   };
 
   const handleToggleCollapse = async (eventId: string, state: boolean) => {
@@ -119,6 +123,7 @@ export default function CategoryDetailPage() {
           <CategoryMenu 
             onEdit={handleEditCategory} 
             onDelete={handleDeleteCategory} 
+            onViewStory={handleViewStory}
           />
         </div>
         <button onClick={() => router.back()} className={styles.backButton} aria-label="חזור">

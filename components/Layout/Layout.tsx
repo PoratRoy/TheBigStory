@@ -22,6 +22,7 @@ export default function Layout({ children }: LayoutProps) {
     pathname === '/add-event' || 
     pathname === '/add-category' || 
     pathname === '/settings' ||
+    pathname === '/manage-uniqe' ||
     pathname.startsWith('/edit-category/');
 
   if (isFormPage) {

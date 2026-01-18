@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import { Input } from '@/components/Form/Input';
 import { ColorPicker } from '@/components/Form/ColorPicker';
 import { Button } from '@/components/Form/Button';
@@ -76,9 +77,10 @@ export default function AddCategoryPage() {
     });
 
     if (result.success) {
+      toast.success('תקופה נשמרה');
       router.push('/');
     } else {
-      setError(result.error || 'שגיאה בשמירת הקטגוריה');
+      toast.error(result.error || 'שגיאה בשמירת הקטגוריה');
       setIsSubmitting(false);
     }
   };

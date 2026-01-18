@@ -10,6 +10,7 @@ import { deleteCategoryAction } from '@/app/actions/DELETE/deleteCategoryAction'
 import { createEventAction } from '@/app/actions/POST/createEventAction';
 import { updateEventAction } from '@/app/actions/POST/updateEventAction';
 import { deleteEventAction } from '@/app/actions/DELETE/deleteEventAction';
+import { reorderEventPosAction } from '@/app/actions/POST/reorderEventPosAction';
 import { updateTimelineAction } from '@/app/actions/POST/updateTimelineAction';
 import { Timeline } from '@/models/interface/timeline';
 import { Category } from '@/models/interface/category';
@@ -69,10 +70,9 @@ export function TimelineProvider({ children }: { children: React.ReactNode }) {
 
       // Generate year options
       const currentYear = new Date().getFullYear();
-      const startYear = timelineData?.startYear || 1998;
       const years = Array.from(
-        { length: currentYear - startYear + 1 }, 
-        (_, i) => startYear + i
+        { length: currentYear - 1940 + 1 }, 
+        (_, i) => 1940 + i
       ).reverse();
       setYearOptions(years.map(y => ({ value: y, label: y })));
 
