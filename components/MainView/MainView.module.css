@@ -28,3 +28,32 @@
   margin-bottom: 1rem;
   color: var(--bar-color);
 }
+
+.storyPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  gap: 1.5rem;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.storyPlaceholder svg {
+  width: 4rem;
+  height: 4rem;
+  opacity: 0.5;
+}
+
+.storyPlaceholder h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.storyPlaceholder p {
+  font-size: 1.1rem;
+  max-width: 400px;
+  line-height: 1.6;
+}

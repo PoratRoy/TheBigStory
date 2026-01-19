@@ -23,6 +23,11 @@ import { Copy } from './Copy';
 import { Random } from './Random';
 import { Hamburger } from './Hamburger';
 import { Dots } from './Dots';
+import { Book } from './Book';
+import { DotsHoriz } from './DotsHoriz';
+import { DotsVert } from './DotsVert';
+import { Eye } from './Eye';
+import { Globle } from './Globle';
 
 export {
   Add,
@@ -50,6 +55,11 @@ export {
   Random,
   Hamburger,
   Dots,
+  Book,
+  DotsHoriz,
+  DotsVert,
+  Eye,
+  Globle,
 };
 
 export const Icons = {
@@ -78,4 +88,9 @@ export const Icons = {
   Random,
   Hamburger,
   Dots,
+  Book,
+  DotsHoriz,
+  DotsVert,
+  Eye,
+  Globle,
 };

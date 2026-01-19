@@ -50,7 +50,12 @@ export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onEdit, onDelete, on
         aria-expanded={isOpen}
         aria-label="אפשרויות קטגוריה"
       >
-        <Icons.Dots />
+        <div className={styles.mobileIcon}>
+          <Icons.Eye />
+        </div>
+        <div className={styles.desktopIcon}>
+          <Icons.DotsVert />
+        </div>
       </button>
 
       <AnimatePresence>
@@ -69,7 +74,7 @@ export const CategoryMenu: React.FC<CategoryMenuProps> = ({ onEdit, onDelete, on
               onClick={() => handleAction(onViewStory)}
               role="menuitem"
             >
-              <Icons.List />
+              <Icons.Book />
               <span>קרא כסיפור</span>
             </button>
             <button

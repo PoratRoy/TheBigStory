@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from '@/style/icons';
 import { useLayout } from '@/context/LayoutContext';
 import ProfileMenu from '../ProfileMenu/ProfileMenu';
@@ -14,8 +15,10 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { viewMode, toggleViewMode } = useLayout();
+  const { viewMode, setViewMode } = useLayout();
   const pathname = usePathname();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Define paths that should hide the global TopBar and BottomBar
   const isFormPage = 
@@ -26,9 +29,30 @@ export default function Layout({ children }: LayoutProps) {
     pathname.startsWith('/edit-category/') ||
     pathname.startsWith('/edit-event/');
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   if (isFormPage) {
     return <div className={styles.layout} dir="rtl">{children}</div>;
   }
+
+  const viewOptions = [
+    { mode: 'grid', label: 'גריד', icon: <Icons.ViewGrid /> },
+    { mode: 'timeline', label: 'ציר זמן', icon: <Icons.ViewTimeline /> },
+    { mode: 'story', label: 'סיפור', icon: <Icons.Book /> },
+  ] as const;
 
   return (
     <div className={styles.layout} dir="rtl">
@@ -50,9 +74,56 @@ export default function Layout({ children }: LayoutProps) {
           <Search />
           </div>
           
-          <button className={styles.iconButton} aria-label="החלף תצוגה" onClick={toggleViewMode}>
-            {viewMode === 'grid' ? <Icons.ViewTimeline /> : <Icons.ViewGrid />}
-          </button>
+          {/* Desktop View Toggle */}
+          <div className={styles.viewToggleDesktop}>
+            {viewOptions.map((opt) => (
+              <button
+                key={opt.mode}
+                className={`${styles.viewToggleButton} ${viewMode === opt.mode ? styles.viewToggleButtonActive : ''}`}
+                onClick={() => setViewMode(opt.mode)}
+                title={opt.label}
+              >
+                {opt.icon}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile View Toggle (Eye icon + Dropdown) */}
+          <div className={styles.mobileViewToggle} ref={dropdownRef}>
+            <button 
+              className={styles.iconButton} 
+              aria-label="החלף תצוגה" 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <Icons.Eye />
+            </button>
+            
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <motion.div 
+                  className={styles.viewDropdown}
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.1 }}
+                >
+                  {viewOptions.map((opt) => (
+                    <button
+                      key={opt.mode}
+                      className={`${styles.dropdownItem} ${viewMode === opt.mode ? styles.dropdownItemActive : ''}`}
+                      onClick={() => {
+                        setViewMode(opt.mode);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {opt.icon}
+                      <span>{opt.label}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* Desktop Actions */}
           <div className={styles.topBarActions}>

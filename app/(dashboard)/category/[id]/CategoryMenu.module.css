@@ -82,6 +82,27 @@
   color: #ff4d4f;
 }
 
+.mobileIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktopIcon {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .mobileIcon {
+    display: none;
+  }
+  .desktopIcon {
+    display: flex;
+  }
+}
+
 @media (max-width: 768px) {
   .dropdown {
     right: auto;

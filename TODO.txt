@@ -20,14 +20,19 @@ v - add uniqe categories and show them on the hamburger
 v - category - top bar icon to show simple list of all the events as read only
 v - category - implement move functionalty
 v - option to update the event categories
+v - hamburger layout z index
+v - improve icons - story, 3 dots 
+v -- story
 
-- hamburger layout z index
+- when read as story, there should be timeline list next to the story, so you can jump between categories
 - category return to main (not to the last page)
-- improve icons - story, 3 dots 
 - hard to select categories when create new event
 - query params
 - slow
 - reorder the timeline stack
+- on main page more display options
+-- map
+
 
 v - מביך
 v - מיוחד

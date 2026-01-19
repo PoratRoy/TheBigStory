@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-type ViewMode = 'grid' | 'timeline';
+type ViewMode = 'grid' | 'timeline' | 'story';
 
 interface LayoutContextType {
   viewMode: ViewMode;
@@ -19,7 +19,11 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const toggleViewMode = () => {
-    setViewMode((prev) => (prev === 'grid' ? 'timeline' : 'grid'));
+    setViewMode((prev) => {
+      if (prev === 'grid') return 'timeline';
+      if (prev === 'timeline') return 'story';
+      return 'grid';
+    });
   };
 
   return (

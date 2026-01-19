@@ -124,7 +124,103 @@
   font-weight: 700;
 }
 
+.viewToggleDesktop {
+  display: none;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-small);
+  padding: 2px;
+  gap: 2px;
+}
+
+.viewToggleButton {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--radius-small) - 2px);
+  transition: background-color 0.2s, color 0.2s;
+  opacity: 0.6;
+}
+
+.viewToggleButton:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.viewToggleButtonActive {
+  opacity: 1;
+  background-color: var(--border-color) !important;
+}
+
+.mobileViewToggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.viewDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background-color: var(--bar-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-medium);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  min-width: 140px;
+  z-index: 100;
+  overflow: hidden;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dropdownItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: var(--radius-small);
+  text-align: right;
+}
+
+.dropdownItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dropdownItemActive {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+}
+
+.dropdownItem svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  opacity: 0.8;
+}
+
 @media (min-width: 768px) {
+  .viewToggleDesktop {
+    display: flex;
+  }
+  
+  .mobileViewToggle {
+    display: none;
+  }
   .topBarCenter {
     display: flex;
   }
